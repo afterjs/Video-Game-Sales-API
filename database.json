@@ -1,0 +1,12 @@
+{
+    "dev": {
+      "driver": { "ENV": "DRIVER" },
+      "user": { "ENV": "POSTGRES_USERNAME" },
+      "password": { "ENV": "POSTGRES_PASSWORD" },
+      "host": { "ENV": "POSTGRES_HOSTNAME" },
+      "database": { "ENV": "POSTGRES_DATABASE" },
+      "port": { "ENV": "POSTGRES_PORT" },
+      "ssl": false,
+      "schema":{ "ENV": "SCHEMA" }
+    }
+  }
