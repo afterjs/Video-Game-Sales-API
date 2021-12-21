@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "migrate": "db-migrate up"
   },
   "repository": {
     "type": "git",
@@ -27,5 +28,8 @@
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.12.0-beta.3"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.3.0"
   }
 }

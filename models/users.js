@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 const database = require('../db');
+const Roles = require('./roles')
 
-
-const Info = database.define('users', {
+const User = database.define('users', {
     id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -13,20 +13,18 @@ const Info = database.define('users', {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
     name: {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    permissions:  {
-        type: Sequelize.INTEGER,
+    password: {
+        type: Sequelize.STRING,
         allowNull: false,
-    },
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE,
+    }
 })
 
-module.exports = Info;
+User.belongsTo(Roles, {
+    constrain: true,
+    foreignKey: 'rolesid'
+})
+module.exports = User;

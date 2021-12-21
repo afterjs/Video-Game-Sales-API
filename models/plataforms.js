@@ -1,20 +1,18 @@
 const Sequelize = require('sequelize');
 const database = require('../db');
 
-
-const Info = database.define('perms_roles', {
+const Plataforms = database.define('plataforms', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
-    label: {
+    name: {
         type: Sequelize.STRING,
         allowNull: false,
-    },
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE,
+        unique: true
+    }
 })
 
-module.exports = Info;
+module.exports = Plataforms;
