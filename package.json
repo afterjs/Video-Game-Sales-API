@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
-    "migrate": "db-migrate up"
+    "migrate": "db-migrate up",
+    "readCsv" : "node readCsv.js"
   },
   "repository": {
     "type": "git",

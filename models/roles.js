@@ -3,10 +3,10 @@ const database = require('../db');
 
 const Roles = database.define('roles', {
     id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
     },
     name: {
         type: Sequelize.STRING,

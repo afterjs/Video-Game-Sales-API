@@ -12,6 +12,10 @@ const Sales = database.define("sales", {
     allowNull: false,
     primaryKey: true,
   },
+  rank: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  }
 });
 
 Sales.belongsTo(Genre, {

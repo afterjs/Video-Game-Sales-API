@@ -14,24 +14,20 @@ fs.readFile("./data/dataset.csv", "utf8", function (err, data) {
   let gamesArr = [];
   let plataformsArr = [];
 
-
   for (let i = 0; i < csvData.length; i++) {
-    const genreName = csvData[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)[4];
-    const gameName = csvData[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)[1];
-    const plataformsName = csvData[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)[2];
+    const genreName = splitData(csvData[i])[4];
+    const gameName = splitData(csvData[i])[1];
+    const plataformsName = splitData(csvData[i])[2];
 
     if (genreName != undefined) {
       const schema = {
-        id: i + 1,
         name: resolveString(genreName),
       };
-
       genresArr.push(schema);
     }
 
     if (gameName != undefined) {
       const schema = {
-        id: i + 1,
         name: resolveString(gameName),
       };
       gamesArr.push(schema);
@@ -39,7 +35,6 @@ fs.readFile("./data/dataset.csv", "utf8", function (err, data) {
 
     if (plataformsName != undefined) {
       const schema = {
-        id: i + 1,
         name: resolveString(plataformsName),
       };
       plataformsArr.push(schema);
@@ -54,29 +49,32 @@ let resolveString = (str) => {
   return str.trim().replace(/"/g, "").toLocaleLowerCase();
 };
 
+let splitData = (str) => {
+  return str.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+};
+
 let insertData = async (genres, games, plataforms) => {
-  const counter = 0;
+  try {
+    await Genres.bulkCreate(genres, {
+      ignoreDuplicates: true,
+    }).then(() => {
+      console.log("Succesfully added genres");
+    });
 
-  await Genres.bulkCreate(genres, {
-    fields: ["name"],
-    ignoreDuplicates: true,
-  }).then(() => {
-    console.log("Succesfully added genres");
-  });
+    await Games.bulkCreate(games, {
+      ignoreDuplicates: true,
+    }).then(() => {
+      console.log("Succesfully added games");
+    });
 
-  await Games.bulkCreate(games, {
-    fields: ["name"],
-    ignoreDuplicates: true,
-  }).then(() => {
-    console.log("Succesfully added games");
-  });
-
-  await Plataform.bulkCreate(plataforms, {
-    fields: ["name"],
-    ignoreDuplicates: true,
-  }).then(() => {
-    console.log("Succesfully added plataforms");
-  });
+    await Plataform.bulkCreate(plataforms, {
+      ignoreDuplicates: true,
+    }).then(() => {
+      console.log("Succesfully added plataforms");
+    });
+  } catch (e) {
+    console.log(e);
+  }
 
   return true;
 };
@@ -85,9 +83,10 @@ let insertGameSales = async (allData) => {
   let sales = [];
 
   for (let i = 0; i < allData.length; i++) {
-    const genreName = allData[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)[4];
-    const gameName = allData[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)[1];
-    const plataformsName = allData[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)[2];
+    const rank = splitData(allData[i])[0];
+    const genreName = splitData(allData[i])[4];
+    const gameName = splitData(allData[i])[1];
+    const plataformsName = splitData(allData[i])[2];
 
     if (genreName != undefined && plataformsName != undefined && gameName != undefined) {
       await Promise.all([
@@ -113,6 +112,7 @@ let insertGameSales = async (allData) => {
           const plataformid = data[2][0].id;
 
           const schema = {
+            rank: rank,
             genreid: genreid,
             plataformid: plataformid,
             gameid: gameid,
@@ -122,6 +122,7 @@ let insertGameSales = async (allData) => {
         })
         .catch((error) => {
           // oops some error
+          console.log(error);
         });
     }
 
@@ -130,5 +131,6 @@ let insertGameSales = async (allData) => {
         console.log("Bulk created sales");
       });
     }
+
   }
 };

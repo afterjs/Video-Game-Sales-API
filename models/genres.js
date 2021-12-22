@@ -3,8 +3,8 @@ const database = require('../db');
 
 const Genres = database.define('genres', {
     id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         allowNull: false,
         primaryKey: true
     },
