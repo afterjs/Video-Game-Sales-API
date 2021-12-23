@@ -15,4 +15,5 @@ module.exports = {
         password: process.env.POSTGRES_PASSWORD,
         schema : process.env.POSTGRES_SCHEMA
     },
+    jwtkey: process.env.JWT_SECRET,
 };
