@@ -8,13 +8,14 @@ var bcrypt = require("bcryptjs");
 const database = require("../db");
 const exec = require("child_process").exec;
 
-
 const User = require("../models/users");
 const Roles = require("../models/roles");
 const Genre = require("../models/genres");
 const Plataform = require("../models/plataforms");
 const Game = require("../models/games");
 const Sales = require("../models/sales");
+
+//const Migrations = require("../models/db-migrate/migrations")
 
 /**
  * We receive the dbmigrate dependency from dbmigrate initially.
@@ -97,19 +98,30 @@ let insertUsers = async (roles) => {
     console.log("--------------------------------");
     console.log("\n");
 
-    //console.log("Wait while we are importing all data to sql...");
+    console.log("Wait while we are importing all data to sql...");
 
-    
-    child = exec("npm run readCSV");
+    var child = exec("npm run readCsv");
     child.stdout.pipe(process.stdout);
     child.on("exit", () => {
       process.exit();
     });
+
+
   });
 };
 
-exports.down = function (db) {
-  return null;
+exports.down = function (db, callback) {
+  (async () => {
+    await Promise.all([User.drop(), Roles.drop(), Sales.drop(),Plataform.drop(), Genre.drop(), Game.drop()])
+      .then((data) => {
+        callback();
+      })
+      .catch((error) => {
+        // oops some error
+        return error;
+      });
+  })();
+
 };
 
 exports._meta = {
