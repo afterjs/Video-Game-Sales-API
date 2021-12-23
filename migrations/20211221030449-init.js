@@ -5,7 +5,7 @@ var type;
 var seed;
 
 var bcrypt = require("bcryptjs");
-const database = require("../config/db");
+const database = require("../config/database");
 const exec = require("child_process").exec;
 
 const User = require("../models/users");

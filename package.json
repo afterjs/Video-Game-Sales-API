@@ -2,10 +2,10 @@
   "name": "students_perfor_exams.rm.api",
   "version": "1.0.0",
   "description": "Students performance in exams api",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js",
+    "dev": "nodemon app.js",
     "migrateup": "db-migrate up --config config/database.json",
     "migratedown": "db-migrate down --config config/database.json",
     "readCsv": "node data/readCsv.js"
