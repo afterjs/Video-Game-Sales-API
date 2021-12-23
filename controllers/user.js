@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const Users = require("../models/users");
 const jwt = require("jsonwebtoken");
-const config = require("../config");
+const config = require("../config/config");
 
 function login(req, res, next) {
   const { email, password } = req.body;

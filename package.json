@@ -6,19 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "migrate": "db-migrate up",
-    "readCsv": "node readCsv.js"
+    "migrateup": "db-migrate up --config config/database.json",
+    "migratedown": "db-migrate down --config config/database.json",
+    "readCsv": "node data/readCsv.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/afterjs/Students-Performance-in-Exams-API.git"
+    "url": "git+https://github.com/afterjs/Video-Game-Sales-API.git"
   },
   "author": "Ricardo&Mario",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/afterjs/Students-Performance-in-Exams-API/issues"
+    "url": "https://github.com/afterjs/Video-Game-Sales-API/issues"
   },
-  "homepage": "https://github.com/afterjs/Students-Performance-in-Exams-API#readme",
+  "homepage": "https://github.com/afterjs/Video-Game-Sales-API#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",

@@ -7,7 +7,7 @@ csvName = args[1];
 
 exec(`python3 downloadDataset.py ${fileName} ${csvName}`, (error, stdout, stderr) => {
   if (!error) {
-    child = exec("npm run migrate");
+    child = exec("npm run migrateup");
     child.stdout.pipe(process.stdout);
     child.on("exit", () => {
       process.exit();

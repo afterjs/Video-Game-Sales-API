@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const database = require('../db');
+const database = require('../config/db');
 
 const Games = database.define('games', {
     id: {

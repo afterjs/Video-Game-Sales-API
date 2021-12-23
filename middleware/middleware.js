@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const config = require("../config");
+const config = require("../config/config");
 
 exports.checkAuth = (req, res, next) => {
   try {

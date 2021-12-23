@@ -1,9 +1,9 @@
 const fs = require("fs");
 
-const Games = require("./models/games");
-const Genres = require("./models/genres");
-const Plataform = require("./models/plataforms");
-const Sales = require("./models/sales");
+const Games = require("../models/games");
+const Genres = require("../models/genres");
+const Plataform = require("../models/plataforms");
+const Sales = require("../models/sales");
 
 fs.readFile("./data/dataset.csv", "utf8", function (err, data) {
   if (err) throw err;
