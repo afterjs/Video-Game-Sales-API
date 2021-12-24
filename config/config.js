@@ -16,4 +16,5 @@ module.exports = {
         schema : process.env.POSTGRES_SCHEMA
     },
     jwtkey: process.env.JWT_SECRET,
+    routePrefix: process.env.ROUTE_PREFIX,
 };

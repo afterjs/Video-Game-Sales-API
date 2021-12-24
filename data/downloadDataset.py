@@ -2,8 +2,6 @@ import os
 import sys
 from zipfile import ZipFile
 
-absolute_path = os.path.abspath(__file__)
-
 firstArg = sys.argv[1]
 secondArg = sys.argv[2]
 

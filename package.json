@@ -2,10 +2,10 @@
   "name": "students_perfor_exams.rm.api",
   "version": "1.0.0",
   "description": "Students performance in exams api",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js",
+    "dev": "nodemon app.js",
     "migrateup": "db-migrate up --config config/database.json",
     "migratedown": "db-migrate down --config config/database.json",
     "readCsv": "node data/readCsv.js"
@@ -27,6 +27,7 @@
     "db-migrate-pg": "^1.2.2",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "fastest-validator": "^1.12.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
