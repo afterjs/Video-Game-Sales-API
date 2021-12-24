@@ -34,7 +34,7 @@ let login = (req, res, next) => {
     .then((userResult) => {
       if (userResult === null) {
         res.status(401).json({
-          message: "Email ou password not found",
+          message: "Email or password not found",
         });
       } else {
         bcrypt.compare(password, userResult.password).then((val) => {
@@ -44,7 +44,7 @@ let login = (req, res, next) => {
                 id: userResult.id,
               },
               config.jwtkey,
-              { expiresIn: "1d" }
+              { expiresIn: "1m" }
             );
 
             res.status(201).json({
@@ -105,40 +105,32 @@ const insertUser = (req, res, next) => {
           message: "Email already in use",
         });
       } else {
-        bcrypt
-          .genSalt(10, (err, salt) => {
-            bcrypt.hash(password, salt).then((hash) => {
-              User.create({
-                name: name,
-                email: email,
-                password: hash,
-                roleid: roleid,
-              })
-                .then((result) => {
-                  res.status(201).json({
-                    message: "User created",
-                    info: result,
-                  });
-                })
-                .catch((err) => {
-                  if (parseInt(err.original.code) === 23503) {
-                    res.status(400).json({
-                      message: "The role id is not a foreignKey",
-                      detail: err.original.detail,
-                    });
-                  } else {
-                    res.status(500).json({
-                      message: err.message,
-                    });
-                  }
-                });
-            });
+        bcrypt.hash(password, 10).then((hash) => {
+          User.create({
+            name: name,
+            email: email,
+            password: hash,
+            roleid: roleid,
           })
-          .catch((err) => {
-            res.status(500).json({
-              message: err.message,
+            .then((result) => {
+              res.status(201).json({
+                message: "User created",
+                info: result,
+              });
+            })
+            .catch((err) => {
+              if (parseInt(err.original.code) === 23503) {
+                res.status(400).json({
+                  message: "The role id is not a foreignKey",
+                  detail: err.original.detail,
+                });
+              } else {
+                res.status(500).json({
+                  message: err.message,
+                });
+              }
             });
-          });
+        });
       }
     })
     .catch((err) => {
@@ -277,12 +269,10 @@ const updateUser = async (req, res, next) => {
         errors: vResponse,
       });
     }
-
+    
     updateFields.password = await new Promise((resolve, reject) => {
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password.trim(), salt).then((hash) => {
-          resolve(hash);
-        });
+      bcrypt.hash(password.trim(), 10).then((hash) => {
+        resolve(hash);
       });
     });
   }
