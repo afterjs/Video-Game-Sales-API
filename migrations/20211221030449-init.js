@@ -75,19 +75,19 @@ let insertUsers = async (roles) => {
       email: "view@view.pt",
       name: "Viewer Account",
       password: bcrypt.hashSync("view", salt),
-      rolesid: roles[0],
+      roleid: roles[0],
     },
     {
       email: "edit@edit.pt",
       name: "Edit Account",
       password: bcrypt.hashSync("edit", salt),
-      rolesid: roles[1],
+      roleid: roles[1],
     },
     {
       email: "admin@admin.pt",
       name: "Admir Account",
       password: bcrypt.hashSync("admin", salt),
-      rolesid: roles[2],
+      roleid: roles[2],
     },
   ];
 

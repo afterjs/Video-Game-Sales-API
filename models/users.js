@@ -25,6 +25,6 @@ const User = database.define('users', {
 
 User.belongsTo(Roles, {
     constrain: true,
-    foreignKey: 'rolesid'
+    foreignKey: 'roleid'
 })
 module.exports = User;
