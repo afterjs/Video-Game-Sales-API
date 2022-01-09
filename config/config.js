@@ -17,4 +17,6 @@ module.exports = {
     },
     jwtkey: process.env.JWT_SECRET,
     routePrefix: process.env.ROUTE_PREFIX,
+
+    swaggerPort: process.env.SWAGGER_PORT || "3001"
 };

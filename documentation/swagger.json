@@ -1,0 +1,1734 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API for the Todo Video Games Sales API",
+    "version": "1.0.0",
+    "title": "Video Games Sales API",
+    "contact": {
+      "email": "ricardoamaro@ipvc.pt"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "api/v1/",
+  "security": [
+    {
+      "jwt": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Infos",
+      "description": "Informations about the API"
+    },
+    {
+      "name": "Users",
+      "description": "Users routes"
+    },
+    {
+      "name": "Games",
+      "description": "Game enteties routes"
+    },
+    {
+      "name": "Genres",
+      "description": "Genres enteties routes"
+    },
+    {
+      "name": "Plataforms",
+      "description": "Plataforms enteties routes"
+    },
+    {
+      "name": "Sales",
+      "description": "Sales enteties routes"
+    },
+    {
+      "name": "Roles",
+      "description": "Roles enteties routes"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/api/v1/user/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users data",
+        "description": "This endpoint returns all users data",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns all users data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserData"
+              }
+            }
+          },
+          "400": {
+            "description": "Users data not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Insert new user",
+        "description": "This endpoint will insert new user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return sucess message and user data inserted",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserData"
+              }
+            }
+          },
+          "400": {
+            "description": "The role id is not a foreignKey or email already exists"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      }
+    },
+    "/api/v1/user/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Login user to get token",
+        "description": "This endpoint will login user and return token",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Will return valid jwt token and user data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "Login successful"
+                  },
+                  "token": {
+                    "$ref": "#/definitions/Token"
+                  },
+                  "info": {
+                    "$ref": "#/definitions/UserDataLogin"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email or password"
+          }
+        }
+      }
+    },
+    "/api/v1/user/{uid}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user data by UID",
+        "description": "This endpoint returns all users data",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "user UID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns user data by UID",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserData"
+              }
+            }
+          },
+          "400": {
+            "description": "User not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete user by UID",
+        "description": "This endpoint will delete user by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "User uid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "example": "User deleted"
+            }
+          },
+          "400": {
+            "description": "User not found"
+          },
+          "401": {
+            "description": "Token not found or invalid"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user by UID",
+        "description": "This endpoint will update user by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "User UID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "User updated successfully"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      }
+    },
+    "/api/v1/games/": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Get all games data",
+        "description": "This endpoint returns all games data",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns all games data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Games"
+              }
+            }
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          },
+          "404": {
+            "description": "Games not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Insert new game",
+        "description": "This endpoint will insert new game",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Game ata",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Games"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return sucess message and game data inserted",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "Game inserted successfully"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Games"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          },
+          "406": {
+            "description": "Game already exists"
+          }
+        }
+      }
+    },
+    "/api/v1/games/{uid}": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Get game data by UID",
+        "description": "This endpoint returns game data by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Game UID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns game data by UID",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Games"
+              }
+            }
+          },
+          "400": {
+            "description": "Game not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Update games by id",
+        "description": "This endpoint will update game by id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Game Uid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Game data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "gta vii",
+                  "description": "Game name"
+                }
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "Game updated successfully"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Games"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Game not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Delete game by UID",
+        "description": "This endpoint will delete game by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Game id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "example": "Game deleted"
+            }
+          },
+          "400": {
+            "description": "Game is a foreign key or game not found"
+          },
+          "401": {
+            "description": "Token not found or invalid"
+          }
+        }
+      }
+    },
+    "/api/v1/genres/": {
+      "get": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Get all genres data",
+        "description": "This endpoint returns all genres data",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns all genres data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Genres"
+              }
+            }
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          },
+          "404": {
+            "description": "genres not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Insert new genre",
+        "description": "This endpoint will insert new genre",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Genre data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Genres"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return sucess message and genre data inserted",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "Genre inserted successfully"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Genres"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          },
+          "406": {
+            "description": "Genre already exists"
+          }
+        }
+      }
+    },
+    "/api/v1/genres/{uid}": {
+      "get": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Get Genre data by UID",
+        "description": "This endpoint returns Genre data by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Genre UID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns Genre data by UID",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Genres"
+              }
+            }
+          },
+          "400": {
+            "description": "Genre not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Update Genre by id",
+        "description": "This endpoint will update Genre by id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Genre Uid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Genre data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "SPORTS",
+                  "description": "Genre name"
+                }
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "Genre updated successfully"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Genres"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Genre not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Delete Genre by UID",
+        "description": "This endpoint will delete Genre by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Genre id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "example": "Genre deleted"
+            }
+          },
+          "400": {
+            "description": "Genre is a foreign key or Genre not found"
+          },
+          "401": {
+            "description": "Token not found or invalid"
+          }
+        }
+      }
+    },
+    "/api/v1/plataforms/": {
+      "get": {
+        "tags": [
+          "Plataforms"
+        ],
+        "summary": "Get all Plataforms data",
+        "description": "This endpoint returns all Plataforms data",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns all Plataforms data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Plataforms"
+              }
+            }
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          },
+          "404": {
+            "description": "Plataforms not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Plataforms"
+        ],
+        "summary": "Insert new Plataforms",
+        "description": "This endpoint will insert new Plataforms",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Plataforms data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Plataforms"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return sucess message and Plataforms data inserted",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "Plataforms inserted successfully"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Plataforms"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          },
+          "406": {
+            "description": "Plataforms already exists"
+          }
+        }
+      }
+    },
+    "/api/v1/plataforms/{uid}": {
+      "get": {
+        "tags": [
+          "Plataforms"
+        ],
+        "summary": "Get Plataforms data by UID",
+        "description": "This endpoint returns Plataforms data by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Plataforms UID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns Plataforms data by UID",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Plataforms"
+              }
+            }
+          },
+          "400": {
+            "description": "Plataforms not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Plataforms"
+        ],
+        "summary": "Update Plataforms by id",
+        "description": "This endpoint will update Plataforms by id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Plataforms Uid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Plataforms data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "WII",
+                  "description": "Plataforms name"
+                }
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "Plataforms updated successfully"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Plataforms"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Plataforms not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Plataforms"
+        ],
+        "summary": "Delete Plataforms by UID",
+        "description": "This endpoint will delete Plataforms by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Plataforms id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "example": "Plataforms deleted"
+            }
+          },
+          "400": {
+            "description": "Plataforms is a foreign key or Plataforms not found"
+          },
+          "401": {
+            "description": "Token not found or invalid"
+          }
+        }
+      }
+    },
+    "/api/v1/roles/": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Get all Roles data",
+        "description": "This endpoint returns all Roles data",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns all Roles data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Roles"
+              }
+            }
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          },
+          "404": {
+            "description": "Roles not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Insert new Roles",
+        "description": "This endpoint will insert new Roles",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Roles data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Roles"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return sucess message and Roles data inserted",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "Roles inserted successfully"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Roles"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          },
+          "406": {
+            "description": "Roles already exists"
+          }
+        }
+      }
+    },
+    "/api/v1/roles/{uid}": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Get Roles data by UID",
+        "description": "This endpoint returns Roles data by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Roles UID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns Roles data by UID",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Roles"
+              }
+            }
+          },
+          "400": {
+            "description": "Roles not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Update Roles by id",
+        "description": "This endpoint will update Roles by id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Roles Uid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Roles data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Suporte",
+                  "description": "Roles name"
+                }
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "Roles updated successfully"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Roles"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Roles not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Delete Roles by UID",
+        "description": "This endpoint will delete Roles by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Roles id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "example": "Roles deleted"
+            }
+          },
+          "400": {
+            "description": "Roles is a foreign key or Roles not found"
+          },
+          "401": {
+            "description": "Token not found or invalid"
+          }
+        }
+      }
+    },
+    "/api/v1/sales/": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Get all Sales data",
+        "description": "This endpoint returns all users data",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns all Sales data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Sales"
+              }
+            }
+          },
+          "400": {
+            "description": "Sales data not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Insert new Sales",
+        "description": "This endpoint will insert new Sales",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Sales data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Sales"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return sucess message and Sales data inserted",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "Sales updated successfully"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Sales"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The genreid, or plataformid, or gameid is not a foreignKey or sale already exists"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{uid}": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Get sales data by UID",
+        "description": "This endpoint returns all sales data",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Sales UID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns sales data by UID",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Sales"
+              }
+            }
+          },
+          "400": {
+            "description": "Sales not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Delete sales by UID",
+        "description": "This endpoint will delete sales by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Sales uid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "example": "Sales deleted"
+            }
+          },
+          "400": {
+            "description": "Sales not found"
+          },
+          "401": {
+            "description": "Token not found or invalid"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Update Sales by UID",
+        "description": "This endpoint will update Sales by UID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Sales UID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Sales data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "return success message",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "default": "Sales updated successfully"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sales not found or invalid foreing keys"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      }
+    },
+
+    "/api/version": {
+      "get": {
+        "tags": [
+          "Infos"
+        ],
+        "description": "Obtem a versão atual da API",
+        "responses": {
+          "200": {
+            "description": "This endpoint returns the current version of the API"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "UserData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "name": {
+          "type": "string",
+          "example": "Joao"
+        },
+        "email": {
+          "type": "string",
+          "example": "ricardoamaro@ipvc.pt"
+        },
+        "password": {
+          "type": "string",
+          "example": "123456"
+        },
+        "roleid": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        }
+      }
+    },
+    "UserDataLogin": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "name": {
+          "type": "string",
+          "example": "Joao"
+        },
+        "roleid": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Joao"
+        },
+        "email": {
+          "type": "string",
+          "example": "ricardoamaro@ipvc.pt"
+        },
+        "password": {
+          "type": "string",
+          "example": "123456"
+        },
+        "roleid": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        }
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "ricardoamaro@ipvc.pt",
+          "description": "Email for login"
+        },
+        "password": {
+          "type": "string",
+          "example": "123456",
+          "description": "Password for login"
+        }
+      }
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "acessoToken": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        },
+        "type": {
+          "type": "string",
+          "example": "Bearer"
+        }
+      }
+    },
+    "Games": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "name": {
+          "type": "string",
+          "example": "GTA V"
+        }
+      }
+    },
+    "Genres": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "name": {
+          "type": "string",
+          "example": "Sports"
+        }
+      }
+    },
+    "Plataforms": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "name": {
+          "type": "string",
+          "example": "PS4"
+        }
+      }
+    },
+    "Roles": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "name": {
+          "type": "string",
+          "example": "Admin"
+        }
+      }
+    },
+    "Sales": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "rank": {
+          "type": "integer",
+          "example": 1
+        },
+        "genreID": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "plataformID": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "gameID": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        }
+      }
+    }
+  }
+}
