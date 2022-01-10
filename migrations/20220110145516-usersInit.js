@@ -15,7 +15,7 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db, callback) {
- /* db.runSql(`
+  db.runSql(`
   CREATE TABLE IF NOT EXISTS users
   (
       id uuid NOT NULL,
@@ -34,7 +34,7 @@ exports.up = function (db, callback) {
 `, function (err) {
     if (err) return console.log(err);
     callback();
-  });*/
+  });
   return null
 };
 

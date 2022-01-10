@@ -17,9 +17,13 @@ exports.setup = function (options, seedLink) {
 exports.up = function (db, callback) {
   db.runSql(`
   CREATE TABLE IF NOT EXISTS roles
-    (
-      id uuid NOT NULL
-    )
+  (
+      id uuid NOT NULL,
+      name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+      "createdAt" timestamp with time zone NOT NULL,
+      "updatedAt" timestamp with time zone NOT NULL,
+      CONSTRAINT roles_pkey PRIMARY KEY (id)
+  )
 `, function (err) {
     if (err) return console.log(err);
     callback();
