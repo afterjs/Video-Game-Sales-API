@@ -13,6 +13,6 @@ var options = {
 
 app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
-app.listen(config.swaggerPort, () => {
-  console.log(`swagger server is listening on port ${config.swaggerPort}`);
+app.listen(config.swaggerPort || 3001, () => {
+  console.log(`swagger server is listening on port ${config.swaggerPort || 3001}`);
 });
