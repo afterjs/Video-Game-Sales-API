@@ -1,9 +1,15 @@
 const fs = require("fs");
+const { v4: uuidv4 } = require('uuid');
 
 const Games = require("../models/games");
 const Genres = require("../models/genres");
 const Plataform = require("../models/plataforms");
 const Sales = require("../models/sales");
+
+
+const genresMap = new Map();
+const gamesMap = new Map();
+const plataformsMap = new Map();
 
 fs.readFile("./data/dataset.csv", "utf8", function (err, data) {
   if (err) throw err;
@@ -14,35 +20,68 @@ fs.readFile("./data/dataset.csv", "utf8", function (err, data) {
   let gamesArr = [];
   let plataformsArr = [];
 
+
   for (let i = 0; i < csvData.length; i++) {
     const genreName = splitData(csvData[i])[4];
     const gameName = splitData(csvData[i])[1];
     const plataformsName = splitData(csvData[i])[2];
 
     if (genreName != undefined) {
-      const schema = {
-        name: resolveString(genreName),
-      };
-      genresArr.push(schema);
+      let nameResolved = resolveString(genreName)
+
+      if (!genresMap.has(nameResolved)) {
+        let uid = uuidv4();
+        genresMap.set(nameResolved, uid);
+
+        const schema = {
+          id: uid,
+          name: nameResolved,
+        };
+        genresArr.push(schema);
+
+      }
     }
 
     if (gameName != undefined) {
-      const schema = {
-        name: resolveString(gameName),
-      };
-      gamesArr.push(schema);
+
+      let nameResolved = resolveString(gameName)
+
+      if (!gamesMap.has(nameResolved)) {
+        let uid = uuidv4();
+        gamesMap.set(nameResolved, uid);
+
+        const schema = {
+          id: uid,
+          name: nameResolved,
+        };
+        gamesArr.push(schema);
+      }
     }
 
     if (plataformsName != undefined) {
-      const schema = {
-        name: resolveString(plataformsName),
-      };
-      plataformsArr.push(schema);
+
+      let nameResolved = resolveString(plataformsName)
+
+      if (!plataformsMap.has(nameResolved)) {
+
+        let uid = uuidv4();
+        plataformsMap.set(nameResolved, uid);
+
+        const schema = {
+          id: uid,
+          name: nameResolved,
+        };
+        plataformsArr.push(schema);
+      }
+
     }
   }
   insertData(genresArr, gamesArr, plataformsArr).then(() => {
     insertGameSales(csvData);
   });
+
+
+
 });
 
 let resolveString = (str) => {
@@ -79,7 +118,7 @@ let insertData = async (genres, games, plataforms) => {
   return true;
 };
 
-let insertGameSales = async (allData) => {
+let insertGameSales = (allData) => {
   let sales = [];
 
   for (let i = 0; i < allData.length; i++) {
@@ -89,48 +128,28 @@ let insertGameSales = async (allData) => {
     const plataformsName = splitData(allData[i])[2];
 
     if (genreName != undefined && plataformsName != undefined && gameName != undefined) {
-      await Promise.all([
-        Genres.findAll({
-          where: {
-            name: resolveString(genreName),
-          },
-        }),
-        Games.findAll({
-          where: {
-            name: resolveString(gameName),
-          },
-        }),
-        Plataform.findAll({
-          where: {
-            name: resolveString(plataformsName),
-          },
-        }),
-      ])
-        .then((data) => {
-          const genreid = data[0][0].id;
-          const gameid = data[1][0].id;
-          const plataformid = data[2][0].id;
 
-          const schema = {
-            rank: rank,
-            genreid: genreid,
-            plataformid: plataformid,
-            gameid: gameid,
-          };
 
-          sales.push(schema);
-        })
-        .catch((error) => {
-          // oops some error
-          console.log(error);
-        });
+      let genreId = genresMap.get(resolveString(genreName));
+      let gameId = gamesMap.get(resolveString(gameName));
+      let plataformId = plataformsMap.get(resolveString(plataformsName));
+
+      const schema = {
+        rank: rank,
+        genreid: genreId,
+        plataformid: plataformId,
+        gameid: gameId,
+      };
+
+
+      sales.push(schema);
+
     }
-
-    if (i == allData.length - 1) {
-      await Sales.bulkCreate(sales).then(() => {
-        console.log("Bulk created sales");
-      });
-    }
-
   }
+
+
+  Sales.bulkCreate(sales).then(() => {
+    console.log("Succesfully added sales");
+  });
+
 };
