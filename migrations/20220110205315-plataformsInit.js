@@ -35,8 +35,11 @@ exports.up = function (db, callback) {
 };
 
 
-exports.down = function (db) {
-  return null;
+exports.down = function (db, callback) {
+  db.runSql("DROP TABLE IF EXISTS plataforms;", function (err) {
+    if (err) return console.log(err);
+    callback();
+  });
 };
 
 exports._meta = {

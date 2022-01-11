@@ -38,8 +38,11 @@ exports.up = function (db, callback) {
   return null
 };
 
-exports.down = function (db) {
-  return null;
+exports.down = function (db, callback) {
+  db.runSql("DROP TABLE IF EXISTS users CASCADE;", function (err) {
+    if (err) return console.log(err);
+    callback();
+  });
 };
 
 exports._meta = {

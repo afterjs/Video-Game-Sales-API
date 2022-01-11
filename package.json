@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
     "migrateup": "db-migrate up --config config/database.json",
-    "migratedown": "db-migrate down --config config/database.json",
+    "migratedown": "db-migrate reset --config config/database.json",
     "readCsv": "node data/readCsv.js",
     "tt": "db-migrate create 123"
   },
