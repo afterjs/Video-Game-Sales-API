@@ -44,7 +44,7 @@ let login = (req, res, next) => {
                 id: userResult.id,
               },
               config.jwtkey,
-              { expiresIn: "1m" }
+              { expiresIn: "7d" }
             );
 
             res.status(201).json({

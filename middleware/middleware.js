@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 const config = require("../config/config");
+const repo = require("../config/repository");
 
 const checkAuth = (req, res, next) => {
   let token;
@@ -32,22 +33,24 @@ const logMethod = (err, req, res, next) => {
 };
 
 const isAdmin = (req, res, next) => {
+
   try {
     const token = req.headers.authorization.split(" ")[1];
 
     jwt.verify(token, config.jwtkey, (err, decoded) => {
       if (err) throw new Error(err); // Manage different errors here (Expired, untrusted...)
       const userId = decoded.id; // If no error, token info is returned in 'decoded'
-
+      const adminRoleId = repo.getRoleId("adminId");
       User.findByPk(userId)
         .then((result) => {
           if (result) {
-            if (result.roleid === "549f2410-6c94-47b2-90a9-c157f632a73a") {
+            if (result.roleid === adminRoleId.trim()) {
               next();
             } else {
               return res.status(401).json({
                 name: "Unauthorized Error",
                 message: "Unauthorized",
+                teste: adminRoleId,
               });
             }
           } else {
@@ -69,10 +72,34 @@ const isAdmin = (req, res, next) => {
       message: "Token expired",
     });
   }
+
+
+
+
 };
+
+let protectRole = (req, res, next) => {
+  let id = req.params.id;
+  let adminid = repo.getRoleId("adminId");
+  let viewid = repo.getRoleId("viewId");
+  let editid = repo.getRoleId("editId");
+
+  if (id !== adminid && id !== viewid && id !== editid) {
+    return next();
+  } else {
+    return res.status(401).json({
+      message: "You don't have permission to access this resource",
+    });
+  }
+};
+
+
+
+
 
 module.exports = {
   checkAuth,
   logMethod,
   isAdmin,
+  protectRole,
 };

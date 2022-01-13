@@ -28,8 +28,6 @@ exports.up = function (db, callback) {
       CONSTRAINT users_pkey PRIMARY KEY (id),
       CONSTRAINT users_roleid_fkey FOREIGN KEY (roleid)
           REFERENCES roles (id) MATCH SIMPLE
-          ON UPDATE CASCADE
-          ON DELETE SET NULL
   )
 `, function (err) {
     if (err) return console.log(err);

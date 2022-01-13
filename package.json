@@ -30,6 +30,7 @@
     "express": "^4.17.1",
     "fastest-validator": "^1.12.0",
     "jsonwebtoken": "^8.5.1",
+    "node-cache": "^5.1.2",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.12.0-beta.3",
