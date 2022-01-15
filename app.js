@@ -8,7 +8,6 @@ const swaggerDocument = require("./documentation/swagger.json");
 const repo = require("./config/repository");
 
 
-
 app.use(express.json());
 app.use(cors({ credentials: true, origin: true }));
 

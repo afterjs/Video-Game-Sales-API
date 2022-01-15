@@ -32,52 +32,6 @@ const logMethod = (err, req, res, next) => {
   return next();
 };
 
-const isAdmin = (req, res, next) => {
-
-  try {
-    const token = req.headers.authorization.split(" ")[1];
-
-    jwt.verify(token, config.jwtkey, (err, decoded) => {
-      if (err) throw new Error(err); // Manage different errors here (Expired, untrusted...)
-      const userId = decoded.id; // If no error, token info is returned in 'decoded'
-      const adminRoleId = repo.getRoleId("adminId");
-      User.findByPk(userId)
-        .then((result) => {
-          if (result) {
-            if (result.roleid === adminRoleId.trim()) {
-              next();
-            } else {
-              return res.status(401).json({
-                name: "Unauthorized Error",
-                message: "Unauthorized",
-                teste: adminRoleId,
-              });
-            }
-          } else {
-            return res.status(401).json({
-              name: "Unauthorized Error",
-              message: "Unauthorized",
-            });
-          }
-        })
-        .catch((err) => {
-          res.status(500).json({
-            message: err.message,
-          });
-        });
-    });
-  } catch (e) {
-    return res.status(401).json({
-      name: "TokenExpiredError",
-      message: "Token expired",
-    });
-  }
-
-
-
-
-};
-
 let protectRole = (req, res, next) => {
   let id = req.params.id;
   let adminid = repo.getRoleId("adminId");
@@ -93,13 +47,84 @@ let protectRole = (req, res, next) => {
   }
 };
 
+const checkRole = (roleTypeNeeded) => {
+  return (req, res, next) => {
+    try {
+      const token = req.headers.authorization.split(" ")[1];
 
+      jwt.verify(token, config.jwtkey, (err, decoded) => {
+        if (err) throw new Error(err);
+        const userId = decoded.id;
 
+        const adminRoleId = repo.getRoleId("adminId");
+        const viewRoleId = repo.getRoleId("viewId");
+        const editRoleId = repo.getRoleId("editId");
 
+        User.findByPk(userId)
+          .then((result) => {
+            if (result) {
+              let resultId = result.roleid;
+
+              switch (roleTypeNeeded.trim()) {
+                case "admin":
+                  if (resultId === adminRoleId.trim()) {
+                    return next();
+                  } else {
+                    return res.status(401).json({
+                      name: "Unauthorized Error",
+                      message: "You don't have permission to access this resource",
+                    });
+                  }
+                case "view":
+                  if (resultId === viewRoleId.trim() || resultId === adminRoleId.trim() || resultId === editRoleId.trim()) {
+                    return next();
+                  } else {
+                    return res.status(401).json({
+                      name: "Unauthorized Error",
+                      message: "You don't have permission to access this resource",
+                    });
+                  }
+                case "edit":
+                  if (resultId === adminRoleId.trim() || resultId === editRoleId.trim()) {
+                    return next();
+                  } else {
+                    return res.status(401).json({
+                      name: "Unauthorized Error",
+                      message: "You don't have permission to access this resource",
+                    });
+                  }
+                default:
+                  return res.status(401).json({
+                    name: "Unauthorized Error",
+                    message: "You don't have permission to access this resource",
+                  });
+              }
+              
+            } else {
+              return res.status(401).json({
+                name: "Unauthorized Error",
+                message: "Unauthorized",
+              });
+            }
+          })
+          .catch((err) => {
+            res.status(500).json({
+              message: err.message,
+            });
+          });
+      });
+    } catch (e) {
+      return res.status(401).json({
+        name: "TokenExpiredError",
+        message: "Token expired",
+      });
+    }
+  };
+};
 
 module.exports = {
   checkAuth,
   logMethod,
-  isAdmin,
   protectRole,
+  checkRole,
 };

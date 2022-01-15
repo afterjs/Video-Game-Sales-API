@@ -24,9 +24,13 @@ const loadRolesId = async () => {
   });
 
 
+
   rolesMap.set("adminId", adminRole.dataValues.id);
   rolesMap.set("viewId", viewRole.dataValues.id);
   rolesMap.set("editId", editRole.dataValues.id);
+
+
+  console.log(rolesMap)
 
   return true;
 };

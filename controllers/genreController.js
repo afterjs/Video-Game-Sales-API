@@ -1,6 +1,5 @@
-const Genre = require("../models/genre");
+const Genre = require("../models/genres");
 const Validator = require("fastest-validator");
-const { user } = require("pg/lib/defaults");
 const v = new Validator();
 
 let getAll = (req, res, next) => {
@@ -47,7 +46,142 @@ let getById = (req, res, next) => {
     });
 };
 
+let create = (req, res, next) => {
+  let name = req.body.name;
+
+  const vResponse = v.validate({ name: name }, { name: { type: "string", min: 3, max: 255, required: true } });
+  if (vResponse !== true) {
+    return res.status(400).json({
+      message: "Validation error",
+      errors: vResponse,
+    });
+  }
+  name = name.trim().toLowerCase();
+
+  Genre.create({
+      name: name,
+    })
+    .then((result) => {
+      res.status(200).json({
+        message: "Genre created successfully",
+        result: result,
+      });
+    })
+    .catch((err) => {
+      if (err.name === "SequelizeUniqueConstraintError") {
+        res.status(500).json({
+          message: "This genre already exists",
+        });
+      } else {
+        res.status(500).json({
+          message: err.message,
+        });
+      }
+    });
+};
+
+let updateGenre = (req, res, next) => {
+  let id = req.params.id;
+  let name = req.body.name;
+
+  const schema = {
+    id: { type: "uuid" },
+    name: { type: "string", min: 3, max: 255, required: true },
+  };
+
+  const vResponse = v.validate({ id: id, name: name }, schema);
+
+  if (vResponse !== true) {
+    return res.status(400).json({
+      message: "Validation error",
+      errors: vResponse,
+    });
+  }
+
+  name = name.trim().toLowerCase();
+  id = id.trim();
+
+  Genre.update(
+    {
+      name: req.body.name,
+    },
+    {
+      where: {
+        id: req.params.id,
+      },
+    }
+  )
+    .then((result) => {
+      if (result[0] > 0) {
+        res.status(200).json({
+          message: "Genre updated successfully",
+        });
+      } else {
+        res.status(404).json({
+          message: "The genre with the given ID was not found.",
+        });
+      }
+    })
+    .catch((err) => {
+      if (err.name === "SequelizeUniqueConstraintError") {
+        res.status(500).json({
+          message: "This genre already exists",
+        });
+      } else {
+        res.status(500).json({
+          message: err.message,
+        });
+      }
+    });
+};
+
+let deleteGenre = (req, res, next) => {
+  let id = req.params.id;
+ 
+  const vResponse = v.validate({ id: id }, { id: { type: "uuid" } });
+
+  if (vResponse !== true) {
+    return res.status(400).json({
+      message: "Validation error",
+      errors: vResponse,
+    });
+  }
+  id = id.trim();
+
+  Genre.destroy({
+    where: {
+      id: id,
+    },
+  })
+    .then((result) => {
+      console.log(result);
+      if (result > 0) {
+        res.status(200).json({
+          message: "Genre deleted successfully",
+        });
+      } else {
+        res.status(404).json({
+          message: "The genre with the given ID was not found.",
+        });
+      }
+    })
+    .catch((err) => {
+      if (err.name === "SequelizeForeignKeyConstraintError") {
+        res.status(500).json({
+          message: "You can't delete a foreign key that is in use",
+        });
+      } else {
+        res.status(500).json({
+          message: err.message,
+        });
+      }
+    });
+};
+
 module.exports = {
   getAll,
   getById,
+  create,
+  updateGenre,
+  deleteGenre
 };
