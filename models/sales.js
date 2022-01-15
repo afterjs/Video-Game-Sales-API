@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const database = require('../config/database');
 
 const Genre = require("./genres");
-const Plataform = require("./plataforms");
+const Platform = require("./platforms");
 const Game = require("./games");
 
 const Sales = database.define("sales", {
@@ -22,9 +22,9 @@ Sales.belongsTo(Genre, {
   constrain: true,
   foreignKey: "genreid",
 });
-Sales.belongsTo(Plataform, {
+Sales.belongsTo(Platform, {
   constrain: true,
-  foreignKey: "plataformid",
+  foreignKey: "platformid",
 });
 Sales.belongsTo(Game, {
   constrain: true,

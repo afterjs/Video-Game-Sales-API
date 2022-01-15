@@ -24,7 +24,7 @@ exports.up = function (db, callback) {
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL,
     genreid uuid,
-    plataformid uuid,
+    platformid uuid,
     gameid uuid,
     CONSTRAINT sales_pkey PRIMARY KEY (id),
     CONSTRAINT sales_gameid_fkey FOREIGN KEY (gameid)
@@ -32,8 +32,8 @@ exports.up = function (db, callback) {
     CONSTRAINT sales_genreid_fkey FOREIGN KEY (genreid)
         REFERENCES genres (id) MATCH SIMPLE,
      
-    CONSTRAINT sales_plataformid_fkey FOREIGN KEY (plataformid)
-        REFERENCES plataforms (id) MATCH SIMPLE
+    CONSTRAINT sales_platformid_fkey FOREIGN KEY (platformid)
+        REFERENCES platforms (id) MATCH SIMPLE
 
 )
 `,

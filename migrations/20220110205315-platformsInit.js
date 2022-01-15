@@ -17,14 +17,14 @@ exports.setup = function (options, seedLink) {
 exports.up = function (db, callback) {
   db.runSql(
     `
-    CREATE TABLE IF NOT EXISTS plataforms
+    CREATE TABLE IF NOT EXISTS platforms
 (
     id uuid NOT NULL,
     name character varying(255) COLLATE pg_catalog."default" NOT NULL,
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL,
-    CONSTRAINT plataforms_pkey PRIMARY KEY (id),
-    CONSTRAINT plataforms_name_key UNIQUE (name)
+    CONSTRAINT platforms_pkey PRIMARY KEY (id),
+    CONSTRAINT platforms_name_key UNIQUE (name)
 )
 `,
     function (err) {
@@ -36,7 +36,7 @@ exports.up = function (db, callback) {
 
 
 exports.down = function (db, callback) {
-  db.runSql("DROP TABLE IF EXISTS plataforms;", function (err) {
+  db.runSql("DROP TABLE IF EXISTS platforms;", function (err) {
     if (err) return console.log(err);
     callback();
   });

@@ -3,13 +3,13 @@ const { v4: uuidv4 } = require('uuid');
 
 const Games = require("../models/games");
 const Genres = require("../models/genres");
-const Plataform = require("../models/plataforms");
+const Platform = require("../models/platforms");
 const Sales = require("../models/sales");
 
 
 const genresMap = new Map();
 const gamesMap = new Map();
-const plataformsMap = new Map();
+const platformsMap = new Map();
 
 fs.readFile("./data/dataset.csv", "utf8", function (err, data) {
   if (err) throw err;
@@ -18,13 +18,13 @@ fs.readFile("./data/dataset.csv", "utf8", function (err, data) {
 
   let genresArr = [];
   let gamesArr = [];
-  let plataformsArr = [];
+  let platformsArr = [];
 
 
   for (let i = 0; i < csvData.length; i++) {
     const genreName = splitData(csvData[i])[4];
     const gameName = splitData(csvData[i])[1];
-    const plataformsName = splitData(csvData[i])[2];
+    const platformsName = splitData(csvData[i])[2];
 
     if (genreName != undefined) {
       let nameResolved = resolveString(genreName)
@@ -58,25 +58,25 @@ fs.readFile("./data/dataset.csv", "utf8", function (err, data) {
       }
     }
 
-    if (plataformsName != undefined) {
+    if (platformsName != undefined) {
 
-      let nameResolved = resolveString(plataformsName)
+      let nameResolved = resolveString(platformsName)
 
-      if (!plataformsMap.has(nameResolved)) {
+      if (!platformsMap.has(nameResolved)) {
 
         let uid = uuidv4();
-        plataformsMap.set(nameResolved, uid);
+        platformsMap.set(nameResolved, uid);
 
         const schema = {
           id: uid,
           name: nameResolved,
         };
-        plataformsArr.push(schema);
+        platformsArr.push(schema);
       }
 
     }
   }
-  insertData(genresArr, gamesArr, plataformsArr).then(() => {
+  insertData(genresArr, gamesArr, platformsArr).then(() => {
     insertGameSales(csvData);
   });
 
@@ -92,7 +92,7 @@ let splitData = (str) => {
   return str.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
 };
 
-let insertData = async (genres, games, plataforms) => {
+let insertData = async (genres, games, platforms) => {
   try {
     await Genres.bulkCreate(genres, {
       ignoreDuplicates: true,
@@ -106,10 +106,10 @@ let insertData = async (genres, games, plataforms) => {
       console.log("Succesfully added games");
     });
 
-    await Plataform.bulkCreate(plataforms, {
+    await Platform.bulkCreate(platforms, {
       ignoreDuplicates: true,
     }).then(() => {
-      console.log("Succesfully added plataforms");
+      console.log("Succesfully added platforms");
     });
   } catch (e) {
     console.log(e);
@@ -125,19 +125,19 @@ let insertGameSales = (allData) => {
     const rank = splitData(allData[i])[0];
     const genreName = splitData(allData[i])[4];
     const gameName = splitData(allData[i])[1];
-    const plataformsName = splitData(allData[i])[2];
+    const platformsName = splitData(allData[i])[2];
 
-    if (genreName != undefined && plataformsName != undefined && gameName != undefined) {
+    if (genreName != undefined && platformsName != undefined && gameName != undefined) {
 
 
       let genreId = genresMap.get(resolveString(genreName));
       let gameId = gamesMap.get(resolveString(gameName));
-      let plataformId = plataformsMap.get(resolveString(plataformsName));
+      let platformId = platformsMap.get(resolveString(platformsName));
 
       const schema = {
         rank: rank,
         genreid: genreId,
-        plataformid: plataformId,
+        platformid: platformId,
         gameid: gameId,
       };
 

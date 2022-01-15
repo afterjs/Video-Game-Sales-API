@@ -10,5 +10,4 @@ router.get("/:id", middleware.logMethod, middleware.checkAuth, middleware.checkR
 router.delete("/:id", middleware.logMethod, middleware.checkAuth, middleware.checkRole('admin'), userController.deleteUser); 
 router.put("/:id", middleware.logMethod, middleware.checkAuth, middleware.checkRole('admin'), userController.updateUser);
 
-
 module.exports = router;

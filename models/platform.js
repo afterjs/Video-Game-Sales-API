@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const database = require('../config/database');
 
-const Plataforms = database.define('plataforms', {
+const Platforms = database.define('platforms', {
     id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -15,4 +15,4 @@ const Plataforms = database.define('plataforms', {
     }
 })
 
-module.exports = Plataforms;
+module.exports = Platforms;

@@ -1,20 +1,20 @@
-const Roles = require("../models/roles");
+const Game = require("../models/games");
 const Validator = require("fastest-validator");
 const v = new Validator();
 
 let getAll = (req, res, next) => {
-  Roles.findAll()
+    Game.findAll()
     .then((result) => {
-    return  res.status(200).json(result);
+      return res.status(200).json(result);
     })
     .catch((err) => {
-      return  res.status(500).json({
+      return res.status(500).json({
         message: err.message,
       });
     });
 };
 
-let getById = async (req, res, next) => {
+let getById = (req, res, next) => {
   let id = req.params.id;
 
   const vResponse = v.validate({ id: id }, { id: { type: "uuid" } });
@@ -27,16 +27,16 @@ let getById = async (req, res, next) => {
   }
   id = id.trim();
 
-  Roles.findByPk(id)
+  Game.findByPk(id)
     .then((result) => {
       if (result) {
-        return res.status(200).json({
-          message: "Role found successfully",
+        return  res.status(200).json({
+          message: "Game found successfully",
           result: result,
         });
       }
       return res.status(404).json({
-        message: "Role not found",
+        message: "Game not found",
       });
     })
     .catch((err) => {
@@ -56,74 +56,31 @@ let create = (req, res, next) => {
       errors: vResponse,
     });
   }
-  name = name.trim();
+  name = name.trim().replace(/"/g, "").toLocaleLowerCase()
 
-  Roles.create({
-    name: name,
-  })
+  Game.create({
+      name: name,
+    })
     .then((result) => {
-      return  res.status(200).json({
-        message: "Role created successfully",
+      return res.status(200).json({
+        message: "Game created successfully",
         result: result,
       });
     })
     .catch((err) => {
       if (err.name === "SequelizeUniqueConstraintError") {
         return   res.status(500).json({
-          message: "This role already exists",
+          message: "This game already exists",
         });
       } else {
-        return  res.status(500).json({
+        return res.status(500).json({
           message: err.message,
         });
       }
     });
 };
 
-let deleteRole = (req, res, next) => {
-  let id = req.params.id;
-
-  const vResponse = v.validate({ id: id }, { id: { type: "uuid" } });
-
-  if (vResponse !== true) {
-    return res.status(400).json({
-      message: "Validation error",
-      errors: vResponse,
-    });
-  }
-  id = id.trim();
-
-  Roles.destroy({
-    where: {
-      id: id,
-    },
-  })
-    .then((result) => {
-      console.log(result);
-      if (result > 0) {
-        return  res.status(200).json({
-          message: "Role deleted successfully",
-        });
-      } else {
-        return  res.status(404).json({
-          message: "The role with the given ID was not found.",
-        });
-      }
-    })
-    .catch((err) => {
-      if (err.name === "SequelizeForeignKeyConstraintError") {
-        return  res.status(500).json({
-          message: "You can't delete a foreign key that is in use",
-        });
-      } else {
-        return  res.status(500).json({
-          message: err.message,
-        });
-      }
-    });
-};
-
-let updateRole = (req, res, next) => {
+let updateGame = (req, res, next) => {
   let id = req.params.id;
   let name = req.body.name;
 
@@ -141,10 +98,11 @@ let updateRole = (req, res, next) => {
     });
   }
 
-  name = name.trim();
+  name = name.trim().replace(/"/g, "").toLocaleLowerCase()
+  
   id = id.trim();
 
-  Roles.update(
+  Game.update(
     {
       name: req.body.name,
     },
@@ -157,18 +115,61 @@ let updateRole = (req, res, next) => {
     .then((result) => {
       if (result[0] > 0) {
         return res.status(200).json({
-          message: "Role updated successfully",
+          message: "Game updated successfully",
         });
       } else {
-        return  res.status(404).json({
-          message: "The role with the given ID was not found.",
+        return res.status(404).json({
+          message: "The game with the given ID was not found.",
         });
       }
     })
     .catch((err) => {
       if (err.name === "SequelizeUniqueConstraintError") {
-        return   res.status(500).json({
-          message: "This role already exists",
+        return res.status(500).json({
+          message: "This game already exists",
+        });
+      } else {
+        return res.status(500).json({
+          message: err.message,
+        });
+      }
+    });
+};
+
+let deleteGame = (req, res, next) => {
+  let id = req.params.id;
+ 
+  const vResponse = v.validate({ id: id }, { id: { type: "uuid" } });
+
+  if (vResponse !== true) {
+    return res.status(400).json({
+      message: "Validation error",
+      errors: vResponse,
+    });
+  }
+  id = id.trim();
+
+  Game.destroy({
+    where: {
+      id: id,
+    },
+  })
+    .then((result) => {
+      console.log(result);
+      if (result > 0) {
+        return res.status(200).json({
+          message: "Game deleted successfully",
+        });
+      } else {
+        return res.status(404).json({
+          message: "The Game with the given ID was not found.",
+        });
+      }
+    })
+    .catch((err) => {
+      if (err.name === "SequelizeForeignKeyConstraintError") {
+        return res.status(500).json({
+          message: "You can't delete a foreign key that is in use",
         });
       } else {
         return  res.status(500).json({
@@ -182,6 +183,6 @@ module.exports = {
   getAll,
   getById,
   create,
-  deleteRole,
-  updateRole,
+  updateGame,
+  deleteGame
 };

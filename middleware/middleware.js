@@ -108,7 +108,7 @@ const checkRole = (roleTypeNeeded) => {
             }
           })
           .catch((err) => {
-            res.status(500).json({
+            return res.status(500).json({
               message: err.message,
             });
           });

@@ -5,10 +5,10 @@ const v = new Validator();
 let getAll = (req, res, next) => {
   Genre.findAll()
     .then((result) => {
-      res.status(200).json(result);
+      return res.status(200).json(result);
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: err.message,
       });
     });
@@ -30,17 +30,17 @@ let getById = (req, res, next) => {
   Genre.findByPk(id)
     .then((result) => {
       if (result) {
-        res.status(200).json({
+        return res.status(200).json({
           message: "Genre found successfully",
           result: result,
         });
       }
-      res.status(404).json({
+      return res.status(404).json({
         message: "Genre not found",
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: err.message,
       });
     });
@@ -56,24 +56,24 @@ let create = (req, res, next) => {
       errors: vResponse,
     });
   }
-  name = name.trim().toLowerCase();
+  name = name.trim().replace(/"/g, "").toLocaleLowerCase();
 
   Genre.create({
-      name: name,
-    })
+    name: name,
+  })
     .then((result) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: "Genre created successfully",
         result: result,
       });
     })
     .catch((err) => {
       if (err.name === "SequelizeUniqueConstraintError") {
-        res.status(500).json({
+        return res.status(500).json({
           message: "This genre already exists",
         });
       } else {
-        res.status(500).json({
+        return res.status(500).json({
           message: err.message,
         });
       }
@@ -98,7 +98,7 @@ let updateGenre = (req, res, next) => {
     });
   }
 
-  name = name.trim().toLowerCase();
+  name = name.trim().replace(/"/g, "").toLocaleLowerCase();
   id = id.trim();
 
   Genre.update(
@@ -113,22 +113,22 @@ let updateGenre = (req, res, next) => {
   )
     .then((result) => {
       if (result[0] > 0) {
-        res.status(200).json({
+        return res.status(200).json({
           message: "Genre updated successfully",
         });
       } else {
-        res.status(404).json({
+        return res.status(404).json({
           message: "The genre with the given ID was not found.",
         });
       }
     })
     .catch((err) => {
       if (err.name === "SequelizeUniqueConstraintError") {
-        res.status(500).json({
+        return res.status(500).json({
           message: "This genre already exists",
         });
       } else {
-        res.status(500).json({
+        return res.status(500).json({
           message: err.message,
         });
       }
@@ -137,7 +137,7 @@ let updateGenre = (req, res, next) => {
 
 let deleteGenre = (req, res, next) => {
   let id = req.params.id;
- 
+
   const vResponse = v.validate({ id: id }, { id: { type: "uuid" } });
 
   if (vResponse !== true) {
@@ -156,22 +156,22 @@ let deleteGenre = (req, res, next) => {
     .then((result) => {
       console.log(result);
       if (result > 0) {
-        res.status(200).json({
+        return res.status(200).json({
           message: "Genre deleted successfully",
         });
       } else {
-        res.status(404).json({
+        return  res.status(404).json({
           message: "The genre with the given ID was not found.",
         });
       }
     })
     .catch((err) => {
       if (err.name === "SequelizeForeignKeyConstraintError") {
-        res.status(500).json({
+        return res.status(500).json({
           message: "You can't delete a foreign key that is in use",
         });
       } else {
-        res.status(500).json({
+        return res.status(500).json({
           message: err.message,
         });
       }
@@ -183,5 +183,5 @@ module.exports = {
   getById,
   create,
   updateGenre,
-  deleteGenre
+  deleteGenre,
 };

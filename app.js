@@ -20,6 +20,8 @@ var options = {
 app.use(`${config.routePrefix}/user`, userRoute.user);
 app.use(`${config.routePrefix}/roles`, userRoute.role);
 app.use(`${config.routePrefix}/genres`, userRoute.genre);
+app.use(`${config.routePrefix}/games`, userRoute.game);
+app.use(`${config.routePrefix}/platforms`, userRoute.platform);
 app.use(`${config.routePrefix}/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 app.use((err, req, res, next) => {
