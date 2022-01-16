@@ -2,8 +2,9 @@ require('dotenv').config();
 
 module.exports = {
     port:       process.env.PORT || 3000,
-    version:    process.env.VERSION,
+    version:    process.env.VERSION || '1.0.0',
     hostname:   process.env.HOSTNAME || "localhost",
+    hostname_port : process.env.HOSTNAME_PORT || "localhost:3000",
 
     pg: {
         driver : process.env.DRIVER,
@@ -18,5 +19,4 @@ module.exports = {
     jwtkey: process.env.JWT_SECRET,
     routePrefix: process.env.ROUTE_PREFIX,
 
-    swaggerPort: process.env.SWAGGER_PORT || "3001"
 };

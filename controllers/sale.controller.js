@@ -1,7 +1,7 @@
 const Sale = require("../models/sales");
 const Games = require("../models/games");
 const Genres = require("../models/genres");
-const Platform = require("../models/platform");
+const Platform = require("../models/platforms");
 
 const Validator = require("fastest-validator");
 const v = new Validator();

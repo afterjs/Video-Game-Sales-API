@@ -8,7 +8,7 @@ const Log = database.define("logs", {
     allowNull: false,
     primaryKey: true,
   },
-  remoteAddress: {
+  remoteaddress: {
     type: Sequelize.STRING,
     allowNull: false,
   },
@@ -20,11 +20,7 @@ const Log = database.define("logs", {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  username: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  usernameId: {
+  usernameid: {
     type: Sequelize.STRING,
     allowNull: false,
   },

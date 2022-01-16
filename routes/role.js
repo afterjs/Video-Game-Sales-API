@@ -1,12 +1,12 @@
 const express = require("express");
 const middleware = require("../middleware/middleware");
-const roleController = require("../controllers/roleController.js");
+const controller = require("../controllers");
 const router = express.Router();
 
-router.get("/", middleware.logMethod, middleware.checkAuth, middleware.checkRole("admin"), roleController.getAll);
-router.get("/:id", middleware.logMethod, middleware.checkAuth, middleware.checkRole("admin"), roleController.getById);
-router.post("/", middleware.logMethod, middleware.checkAuth, middleware.checkRole("admin"), roleController.create);
-router.delete("/:id", middleware.logMethod, middleware.protectRole, middleware.checkAuth, middleware.checkRole("admin"), roleController.deleteRole);
-router.put("/:id", middleware.logMethod, middleware.protectRole, middleware.checkAuth, middleware.checkRole("admin"), roleController.updateRole);
+router.get("/", middleware.checkAuth, middleware.checkRole("admin"), controller.role.getAll);
+router.get("/:id", middleware.checkAuth, middleware.checkRole("admin"), controller.role.getById);
+router.post("/", middleware.checkAuth, middleware.checkRole("admin"), controller.role.create);
+router.delete("/:id", middleware.protectRole, middleware.checkAuth, middleware.checkRole("admin"), controller.role.deleteRole);
+router.put("/:id", middleware.protectRole, middleware.checkAuth, middleware.checkRole("admin"), controller.role.updateRole);
 
 module.exports = router;

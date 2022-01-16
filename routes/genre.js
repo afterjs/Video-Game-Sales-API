@@ -1,13 +1,13 @@
 const express = require("express");
 const middleware = require("../middleware/middleware");
-const genreController = require("../controllers/genreController.js");
+const controller = require("../controllers");
 const router = express.Router();
 
-router.get("/", middleware.logMethod, middleware.checkAuth, middleware.checkRole("view"), genreController.getAll);
-router.get("/:id", middleware.logMethod, middleware.checkAuth, middleware.checkRole("view"), genreController.getById);
-router.post("/", middleware.logMethod, middleware.checkAuth, middleware.checkRole("edit"), genreController.create);
-router.put("/:id", middleware.logMethod, middleware.checkAuth, middleware.checkRole("edit"), genreController.updateGenre);
-router.delete("/:id", middleware.logMethod, middleware.checkAuth, middleware.checkRole("edit"), genreController.deleteGenre);
+router.get("/",  middleware.checkAuth, middleware.checkRole("view"), controller.genre.getAll);
+router.get("/:id",  middleware.checkAuth, middleware.checkRole("view"), controller.genre.getById);
+router.post("/",  middleware.checkAuth, middleware.checkRole("edit"), controller.genre.create);
+router.put("/:id",  middleware.checkAuth, middleware.checkRole("edit"), controller.genre.updateGenre);
+router.delete("/:id",  middleware.checkAuth, middleware.checkRole("edit"), controller.genre.deleteGenre);
 
 
 module.exports = router;

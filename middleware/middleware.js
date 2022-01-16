@@ -5,27 +5,24 @@ const repo = require("../config/repository");
 const Logs = require("../models/logs");
 
 const checkAuth = (req, res, next) => {
-  let token;
-  try {
-    token = req.headers.authorization.split(" ")[1];
-  } catch (e) {
-    return res.status(401).json({
-      message: "You need a token to access this resource",
-    });
-  }
+  getToken(req, res).then((result) => {
+    let usernameId = result.id;
+    let remoteAddress = req.socket.remoteAddress;
+    let method = req.method;
+    let originalUrl = req.originalUrl;
 
-  try {
-    jwt.verify(token, config.jwtkey, (err, decoded) => {
-      if (err) throw new Error(err); // Manage different errors here (Expired, untrusted...)
-      req.auth = decoded; // If no error, token info is returned in 'decoded'
-      next();
-    });
-  } catch (e) {
-    return res.status(401).json({
-      name: "Token Expired Error",
-      message: "Token expired",
-    });
-  }
+    path = config.hostname_port + originalUrl;
+
+    if (result.statusCode !== 401) {
+      Logs.create({
+        usernameid: usernameId,
+        remoteaddress: remoteAddress,
+        method: method,
+        path: path,
+      });
+      return next();
+    }
+  });
 };
 
 const getToken = async (req, res) => {
@@ -34,7 +31,7 @@ const getToken = async (req, res) => {
     token = req.headers.authorization.split(" ")[1];
   } catch (e) {
     return res.status(401).json({
-      message: "You need a token to access this resource 1 ",
+      message: "You need a token to access this resource.",
     });
   }
   try {
@@ -51,20 +48,19 @@ const getToken = async (req, res) => {
 };
 
 const logMethod = async (req, res, next) => {
-  getToken(req, res).then((result) => {
-    let usernameId = result.id;
-    let remoteAddress = req.socket.remoteAddress;
-    let method = req.method;
-    let originalUrl = req.originalUrl;
+  let usernameId = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+  let remoteAddress = req.socket.remoteAddress;
+  let method = req.method;
+  let originalUrl = req.originalUrl;
 
-    if (result.statusCode !== 401) {
-      console.log(usernameId);
-      console.log(remoteAddress);
-      console.log(method);
-      console.log(originalUrl);
-    }
+  path = config.hostname_port + originalUrl;
+
+  Logs.create({
+    usernameid: usernameId,
+    remoteaddress: remoteAddress,
+    method: method,
+    path: path,
   });
-
   return next();
 };
 
@@ -85,12 +81,9 @@ let protectRole = (req, res, next) => {
 
 const checkRole = (roleTypeNeeded) => {
   return (req, res, next) => {
-    try {
-      const token = req.headers.authorization.split(" ")[1];
-
-      jwt.verify(token, config.jwtkey, (err, decoded) => {
-        if (err) throw new Error(err);
-        const userId = decoded.id;
+    getToken(req, res).then((result) => {
+      if (result.statusCode !== 401) {
+        const userId = result.id;
 
         const adminRoleId = repo.getRoleId("adminId");
         const viewRoleId = repo.getRoleId("viewId");
@@ -147,13 +140,8 @@ const checkRole = (roleTypeNeeded) => {
               message: err.message,
             });
           });
-      });
-    } catch (e) {
-      return res.status(401).json({
-        name: "TokenExpiredError",
-        message: "Token expired",
-      });
-    }
+      }
+    });
   };
 };
 

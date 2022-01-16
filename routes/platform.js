@@ -1,12 +1,12 @@
 const express = require("express");
 const middleware = require("../middleware/middleware");
-const platformController = require("../controllers/platformController");
+const controller = require("../controllers");
 const router = express.Router();
 
-router.get("/", middleware.logMethod, middleware.checkAuth, middleware.checkRole("view"), platformController.getAll);
-router.get("/:id", middleware.logMethod, middleware.checkAuth, middleware.checkRole("view"), platformController.getById);
-router.post("/", middleware.logMethod, middleware.checkAuth, middleware.checkRole("edit"), platformController.create);
-router.delete("/:id", middleware.logMethod, middleware.protectRole, middleware.checkAuth, middleware.checkRole("edit"), platformController.deletePlatform);
-router.put("/:id", middleware.logMethod, middleware.protectRole, middleware.checkAuth, middleware.checkRole("edit"), platformController.updatePlatform);
+router.get("/",  middleware.checkAuth, middleware.checkRole("view"), controller.platform.getAll);
+router.get("/:id",  middleware.checkAuth, middleware.checkRole("view"), controller.platform.getById);
+router.post("/",  middleware.checkAuth, middleware.checkRole("edit"), controller.platform.create);
+router.delete("/:id",  middleware.protectRole, middleware.checkAuth, middleware.checkRole("edit"), controller.platform.deletePlatform);
+router.put("/:id",  middleware.protectRole, middleware.checkAuth, middleware.checkRole("edit"), controller.platform.updatePlatform);
 
 module.exports = router;

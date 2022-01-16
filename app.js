@@ -17,12 +17,14 @@ var options = {
   customCss: ".models {display: none !important}",
 };
 
-app.use(`${config.routePrefix}/user`, userRoute.user);
+app.use(`${config.routePrefix}/users`, userRoute.user);
 app.use(`${config.routePrefix}/roles`, userRoute.role);
 app.use(`${config.routePrefix}/genres`, userRoute.genre);
 app.use(`${config.routePrefix}/games`, userRoute.game);
 app.use(`${config.routePrefix}/platforms`, userRoute.platform);
 app.use(`${config.routePrefix}/sales`, userRoute.sale);
+app.use(`${config.routePrefix}/logs`, userRoute.log);
+app.use(`${config.routePrefix}/infos`, userRoute.info);
 app.use(`${config.routePrefix}/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 app.use((err, req, res, next) => {
@@ -36,6 +38,19 @@ app.use((err, req, res, next) => {
   }
   next();
 });
+
+app.use(function(req, res) {
+  // Invalid request
+        res.json({
+          error: {
+            'name':'Error',
+            'message':'Invalid Request',
+            'statusCode':404,
+            'docs':'http://localhost:3000/api/v1/api-docs'
+          },
+           message: 'This route does not exist',
+        });
+  });
 
 repo.loadRolesId().then((val) => {
   app.listen(config.port, () => console.log(`Server running on port ${config.port}`));

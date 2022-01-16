@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const Games = require("../models/games");
 const Genres = require("../models/genres");
-const Platform = require("../models/platform");
+const Platform = require("../models/platforms");
 const Sales = require("../models/sales");
 
 

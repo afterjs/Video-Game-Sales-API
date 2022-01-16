@@ -1,4 +1,4 @@
-const Platform = require("../models/platform");
+const Platform = require("../models/platforms");
 const Validator = require("fastest-validator");
 const v = new Validator();
 

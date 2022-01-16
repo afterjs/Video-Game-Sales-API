@@ -20,11 +20,10 @@ exports.up = function (db, callback) {
     CREATE TABLE IF NOT EXISTS logs
 (
     id uuid NOT NULL,
-    remoteAddress character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    remoteaddress character varying(255) COLLATE pg_catalog."default" NOT NULL,
     method character varying(255) COLLATE pg_catalog."default" NOT NULL,
     path character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    username character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    usernameId character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    usernameid character varying(255) COLLATE pg_catalog."default" NOT NULL,
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL,
     CONSTRAINT logs_pkey PRIMARY KEY (id)
