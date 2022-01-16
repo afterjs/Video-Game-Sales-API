@@ -33,7 +33,7 @@ let login = (req, res, next) => {
   User.findOne({ where: { email: email } })
     .then((userResult) => {
       if (userResult === null) {
-        return  res.status(401).json({
+        return res.status(401).json({
           message: "Email or password not found",
         });
       } else {
@@ -47,13 +47,13 @@ let login = (req, res, next) => {
               { expiresIn: "7d" }
             );
 
-            return  res.status(201).json({
+            return res.status(201).json({
               message: "Auhterization success",
               acessToken: acessToken,
               info: userResult,
             });
           } else {
-            return   res.status(401).json({
+            return res.status(401).json({
               message: "Email ou password not found",
             });
           }
@@ -113,19 +113,19 @@ const insertUser = (req, res, next) => {
             roleid: roleid,
           })
             .then((result) => {
-              return   res.status(201).json({
+              return res.status(201).json({
                 message: "User created",
                 info: result,
               });
             })
             .catch((err) => {
               if (parseInt(err.original.code) === 23503) {
-                return   res.status(400).json({
+                return res.status(400).json({
                   message: "The role id is not a foreignKey",
                   detail: err.original.detail,
                 });
               } else {
-                return   res.status(500).json({
+                return res.status(500).json({
                   message: err.message,
                 });
               }
@@ -134,7 +134,7 @@ const insertUser = (req, res, next) => {
       }
     })
     .catch((err) => {
-      return  res.status(500).json({
+      return res.status(500).json({
         message: err.message,
       });
     });
@@ -160,17 +160,17 @@ const deleteUser = (req, res, next) => {
   User.destroy({ where: { id: id } })
     .then((result) => {
       if (parseInt(result) > 0) {
-        return   res.status(200).json({
+        return res.status(200).json({
           message: "User deleted with success!",
         });
       } else {
-        return   res.status(404).json({
+        return res.status(404).json({
           message: "User not found",
         });
       }
     })
     .catch((err) => {
-      return  res.status(500).json({
+      return res.status(500).json({
         message: err.message,
       });
     });
@@ -179,10 +179,10 @@ const deleteUser = (req, res, next) => {
 const getllAllUsers = (req, res, next) => {
   User.findAll()
     .then((result) => {
-      return  res.status(200).json(result);
+      return res.status(200).json(result);
     })
     .catch((err) => {
-      return  res.status(500).json({
+      return res.status(500).json({
         message: err.message,
       });
     });
@@ -209,15 +209,15 @@ const getUserById = (req, res, next) => {
   User.findByPk(id)
     .then((result) => {
       if (result) {
-        return   res.status(200).json(result);
+        return res.status(200).json(result);
       } else {
-        return  res.status(404).json({
+        return res.status(404).json({
           message: "User not found",
         });
       }
     })
     .catch((err) => {
-      return  res.status(500).json({
+      return res.status(500).json({
         message: err.message,
       });
     });
@@ -269,7 +269,7 @@ const updateUser = async (req, res, next) => {
         errors: vResponse,
       });
     }
-    
+
     updateFields.password = await new Promise((resolve, reject) => {
       bcrypt.hash(password.trim(), 10).then((hash) => {
         resolve(hash);
@@ -289,30 +289,36 @@ const updateUser = async (req, res, next) => {
     updateFields.roleid = roleid.trim();
   }
 
-  User.update(updateFields, { where: { id: id } })
-    .then((result) => {
-      if (parseInt(result[0]) > 0) {
-        return  res.status(200).json({
-          message: "User updated with success!",
-        });
-      } else {
-        return  res.status(404).json({
-          message: "User not found",
-        });
-      }
-    })
-    .catch((err) => {
-      if (parseInt(err.original.code) === 23503) {
-        return   res.status(400).json({
-          message: "The role id is not a foreignKey",
-          detail: err.original.detail,
-        });
-      } else {
-        return  res.status(500).json({
-          message: err.message,
-        });
-      }
+  if (Object.keys(updateFields).length === 0) {
+    return res.status(400).json({
+      message: "No fields to update",
     });
+  } else {
+    User.update(updateFields, { where: { id: id } })
+      .then((result) => {
+        if (parseInt(result[0]) > 0) {
+          return res.status(200).json({
+            message: "User updated with success!",
+          });
+        } else {
+          return res.status(404).json({
+            message: "User not found",
+          });
+        }
+      })
+      .catch((err) => {
+        if (parseInt(err.original.code) === 23503) {
+          return res.status(400).json({
+            message: "The role id is not a foreignKey",
+            detail: err.original.detail,
+          });
+        } else {
+          return res.status(500).json({
+            message: err.message,
+          });
+        }
+      });
+  }
 };
 
 module.exports = {

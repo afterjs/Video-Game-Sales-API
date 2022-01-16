@@ -34,10 +34,11 @@ let getById = (req, res, next) => {
           message: "Genre found successfully",
           result: result,
         });
+      } else {
+        return res.status(404).json({
+          message: "Genre not found",
+        });
       }
-      return res.status(404).json({
-        message: "Genre not found",
-      });
     })
     .catch((err) => {
       return res.status(500).json({
@@ -160,7 +161,7 @@ let deleteGenre = (req, res, next) => {
           message: "Genre deleted successfully",
         });
       } else {
-        return  res.status(404).json({
+        return res.status(404).json({
           message: "The genre with the given ID was not found.",
         });
       }

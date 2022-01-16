@@ -17,24 +17,18 @@ exports.setup = function (options, seedLink) {
 exports.up = function (db, callback) {
   db.runSql(
     `
-    CREATE TABLE IF NOT EXISTS sales
-    (
+    CREATE TABLE IF NOT EXISTS logs
+(
     id uuid NOT NULL,
-    rank integer NOT NULL,
+    remoteAddress character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    method character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    path character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    username character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    usernameId character varying(255) COLLATE pg_catalog."default" NOT NULL,
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL,
-    genreid uuid,
-    platformid uuid,
-    gameid uuid,
-    CONSTRAINT sales_pkey PRIMARY KEY (id),
-    CONSTRAINT sales_gameid_fkey FOREIGN KEY (gameid)
-        REFERENCES games (id) MATCH SIMPLE,
-    CONSTRAINT sales_genreid_fkey FOREIGN KEY (genreid)
-        REFERENCES genres (id) MATCH SIMPLE,
-    CONSTRAINT sales_platformid_fkey FOREIGN KEY (platformid)
-        REFERENCES platforms (id) MATCH SIMPLE,
-    CONSTRAINT sales_rank_key UNIQUE (rank)
-
+    CONSTRAINT logs_pkey PRIMARY KEY (id)
+    
 )
 `,
     function (err) {
@@ -45,11 +39,12 @@ exports.up = function (db, callback) {
 };
 
 exports.down = function (db, callback) {
-  db.runSql("DROP TABLE IF EXISTS sales CASCADE;", function (err) {
+  db.runSql("DROP TABLE IF EXISTS logs;", function (err) {
     if (err) return console.log(err);
     callback();
   });
 };
+
 exports._meta = {
   version: 1,
 };

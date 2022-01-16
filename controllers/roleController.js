@@ -5,10 +5,10 @@ const v = new Validator();
 let getAll = (req, res, next) => {
   Roles.findAll()
     .then((result) => {
-    return  res.status(200).json(result);
+      return res.status(200).json(result);
     })
     .catch((err) => {
-      return  res.status(500).json({
+      return res.status(500).json({
         message: err.message,
       });
     });
@@ -34,10 +34,11 @@ let getById = async (req, res, next) => {
           message: "Role found successfully",
           result: result,
         });
+      } else {
+        return res.status(404).json({
+          message: "Role not found",
+        });
       }
-      return res.status(404).json({
-        message: "Role not found",
-      });
     })
     .catch((err) => {
       return res.status(500).json({
@@ -62,18 +63,18 @@ let create = (req, res, next) => {
     name: name,
   })
     .then((result) => {
-      return  res.status(200).json({
+      return res.status(200).json({
         message: "Role created successfully",
         result: result,
       });
     })
     .catch((err) => {
       if (err.name === "SequelizeUniqueConstraintError") {
-        return   res.status(500).json({
+        return res.status(500).json({
           message: "This role already exists",
         });
       } else {
-        return  res.status(500).json({
+        return res.status(500).json({
           message: err.message,
         });
       }
@@ -101,22 +102,22 @@ let deleteRole = (req, res, next) => {
     .then((result) => {
       console.log(result);
       if (result > 0) {
-        return  res.status(200).json({
+        return res.status(200).json({
           message: "Role deleted successfully",
         });
       } else {
-        return  res.status(404).json({
+        return res.status(404).json({
           message: "The role with the given ID was not found.",
         });
       }
     })
     .catch((err) => {
       if (err.name === "SequelizeForeignKeyConstraintError") {
-        return  res.status(500).json({
+        return res.status(500).json({
           message: "You can't delete a foreign key that is in use",
         });
       } else {
-        return  res.status(500).json({
+        return res.status(500).json({
           message: err.message,
         });
       }
@@ -160,18 +161,18 @@ let updateRole = (req, res, next) => {
           message: "Role updated successfully",
         });
       } else {
-        return  res.status(404).json({
+        return res.status(404).json({
           message: "The role with the given ID was not found.",
         });
       }
     })
     .catch((err) => {
       if (err.name === "SequelizeUniqueConstraintError") {
-        return   res.status(500).json({
+        return res.status(500).json({
           message: "This role already exists",
         });
       } else {
-        return  res.status(500).json({
+        return res.status(500).json({
           message: err.message,
         });
       }

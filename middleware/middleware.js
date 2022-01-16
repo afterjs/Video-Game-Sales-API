@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 const config = require("../config/config");
 const repo = require("../config/repository");
+const Logs = require("../models/logs");
 
 const checkAuth = (req, res, next) => {
   let token;
@@ -27,8 +28,43 @@ const checkAuth = (req, res, next) => {
   }
 };
 
-const logMethod = (err, req, res, next) => {
-  console.log(`[${req.socket.remoteAddress}] ${req.method} ${req.originalUrl} `);
+const getToken = async (req, res) => {
+  let token;
+  try {
+    token = req.headers.authorization.split(" ")[1];
+  } catch (e) {
+    return res.status(401).json({
+      message: "You need a token to access this resource 1 ",
+    });
+  }
+  try {
+    return jwt.verify(token, config.jwtkey, (err, decoded) => {
+      if (err) throw new Error(err); // Manage different errors here (Expired, untrusted...)
+      return decoded;
+    });
+  } catch (e) {
+    return res.status(401).json({
+      name: "Token Expired Error",
+      message: "Token expired",
+    });
+  }
+};
+
+const logMethod = async (req, res, next) => {
+  getToken(req, res).then((result) => {
+    let usernameId = result.id;
+    let remoteAddress = req.socket.remoteAddress;
+    let method = req.method;
+    let originalUrl = req.originalUrl;
+
+    if (result.statusCode !== 401) {
+      console.log(usernameId);
+      console.log(remoteAddress);
+      console.log(method);
+      console.log(originalUrl);
+    }
+  });
+
   return next();
 };
 
@@ -99,7 +135,6 @@ const checkRole = (roleTypeNeeded) => {
                     message: "You don't have permission to access this resource",
                   });
               }
-              
             } else {
               return res.status(401).json({
                 name: "Unauthorized Error",

@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const database = require('../config/database');
 
 const Genre = require("./genres");
-const Platform = require("./platforms");
+const Platform = require("./platform");
 const Game = require("./games");
 
 const Sales = database.define("sales", {
@@ -15,6 +15,7 @@ const Sales = database.define("sales", {
   rank: {
     type: Sequelize.INTEGER,
     allowNull: false,
+    unique: true
   }
 });
 

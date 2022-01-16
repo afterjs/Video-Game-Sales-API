@@ -34,10 +34,11 @@ let getById = (req, res, next) => {
           message: "Platform found successfully",
           result: result,
         });
+      } else {
+        return res.status(404).json({
+          message: "Platform not found",
+        });
       }
-      return res.status(404).json({
-        message: "Platform not found",
-      });
     })
     .catch((err) => {
       return res.status(500).json({

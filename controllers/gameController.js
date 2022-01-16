@@ -3,7 +3,7 @@ const Validator = require("fastest-validator");
 const v = new Validator();
 
 let getAll = (req, res, next) => {
-    Game.findAll()
+  Game.findAll()
     .then((result) => {
       return res.status(200).json(result);
     })
@@ -30,14 +30,15 @@ let getById = (req, res, next) => {
   Game.findByPk(id)
     .then((result) => {
       if (result) {
-        return  res.status(200).json({
+        return res.status(200).json({
           message: "Game found successfully",
           result: result,
         });
+      } else {
+        return res.status(404).json({
+          message: "Game not found",
+        });
       }
-      return res.status(404).json({
-        message: "Game not found",
-      });
     })
     .catch((err) => {
       return res.status(500).json({
@@ -56,11 +57,11 @@ let create = (req, res, next) => {
       errors: vResponse,
     });
   }
-  name = name.trim().replace(/"/g, "").toLocaleLowerCase()
+  name = name.trim().replace(/"/g, "").toLocaleLowerCase();
 
   Game.create({
-      name: name,
-    })
+    name: name,
+  })
     .then((result) => {
       return res.status(200).json({
         message: "Game created successfully",
@@ -69,7 +70,7 @@ let create = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "SequelizeUniqueConstraintError") {
-        return   res.status(500).json({
+        return res.status(500).json({
           message: "This game already exists",
         });
       } else {
@@ -98,8 +99,8 @@ let updateGame = (req, res, next) => {
     });
   }
 
-  name = name.trim().replace(/"/g, "").toLocaleLowerCase()
-  
+  name = name.trim().replace(/"/g, "").toLocaleLowerCase();
+
   id = id.trim();
 
   Game.update(
@@ -138,7 +139,7 @@ let updateGame = (req, res, next) => {
 
 let deleteGame = (req, res, next) => {
   let id = req.params.id;
- 
+
   const vResponse = v.validate({ id: id }, { id: { type: "uuid" } });
 
   if (vResponse !== true) {
@@ -172,7 +173,7 @@ let deleteGame = (req, res, next) => {
           message: "You can't delete a foreign key that is in use",
         });
       } else {
-        return  res.status(500).json({
+        return res.status(500).json({
           message: err.message,
         });
       }
@@ -184,5 +185,5 @@ module.exports = {
   getById,
   create,
   updateGame,
-  deleteGame
+  deleteGame,
 };
