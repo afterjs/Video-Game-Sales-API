@@ -50,7 +50,7 @@ let getById = (req, res, next) => {
 let create = (req, res, next) => {
   let name = req.body.name;
 
-  const vResponse = v.validate({ name: name }, { name: { type: "string", min: 3, max: 255, required: true } });
+  const vResponse = v.validate({ name: name }, { name: { type: "string", required: true } });
   if (vResponse !== true) {
     return res.status(400).json({
       message: "Validation error",
@@ -155,7 +155,6 @@ let deletePlatform = (req, res, next) => {
     },
   })
     .then((result) => {
-      console.log(result);
       if (result > 0) {
         return res.status(200).json({
           message: "Platform deleted successfully",

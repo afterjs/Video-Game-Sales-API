@@ -27,7 +27,6 @@ exports.up = function (db, callback) {
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL,
     CONSTRAINT logs_pkey PRIMARY KEY (id)
-    
 )
 `,
     function (err) {

@@ -11,6 +11,7 @@ const Roles = database.define('roles', {
     name: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
     }
 })
 

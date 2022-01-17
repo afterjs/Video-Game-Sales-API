@@ -60,7 +60,7 @@ let create = (req, res, next) => {
   name = name.trim();
 
   Roles.create({
-    name: name,
+    name: name.toLowerCase(),
   })
     .then((result) => {
       return res.status(200).json({
@@ -147,7 +147,7 @@ let updateRole = (req, res, next) => {
 
   Roles.update(
     {
-      name: req.body.name,
+      name: req.body.name.toLowerCase(),
     },
     {
       where: {

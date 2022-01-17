@@ -39,7 +39,7 @@ let login = (req, res, next) => {
       } else {
         bcrypt.compare(password, userResult.password).then((val) => {
           if (val) {
-            const acessToken = jwt.sign(
+            const accessToken = jwt.sign(
               {
                 id: userResult.id,
               },
@@ -49,7 +49,7 @@ let login = (req, res, next) => {
 
             return res.status(201).json({
               message: "Auhterization success",
-              acessToken: acessToken,
+              accessToken: accessToken,
               info: userResult,
             });
           } else {
@@ -313,9 +313,16 @@ const updateUser = async (req, res, next) => {
             detail: err.original.detail,
           });
         } else {
-          return res.status(500).json({
-            message: err.message,
-          });
+
+          if (parseInt(err.original.code) === 23505) {
+            return res.status(400).json({
+              message: "Email already in use",
+            });
+          } else {
+            return res.status(500).json({
+              message: err,
+            });
+          }
         }
       });
   }

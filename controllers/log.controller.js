@@ -1,4 +1,6 @@
 const Log = require("../models/logs");
+const Validator = require("fastest-validator");
+const v = new Validator();
 
 let getAll = (req, res, next) => {
   Log.findAll()

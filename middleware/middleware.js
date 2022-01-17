@@ -74,7 +74,7 @@ let protectRole = (req, res, next) => {
     return next();
   } else {
     return res.status(401).json({
-      message: "You don't have permission to access this resource",
+      message: "This role is protected.",
     });
   }
 };
@@ -101,7 +101,7 @@ const checkRole = (roleTypeNeeded) => {
                   } else {
                     return res.status(401).json({
                       name: "Unauthorized Error",
-                      message: "You don't have permission to access this resource",
+                      message: "You don't have permission to access this resource.",
                     });
                   }
                 case "view":
@@ -110,7 +110,7 @@ const checkRole = (roleTypeNeeded) => {
                   } else {
                     return res.status(401).json({
                       name: "Unauthorized Error",
-                      message: "You don't have permission to access this resource",
+                      message: "You don't have permission to access this resource.",
                     });
                   }
                 case "edit":
@@ -119,13 +119,13 @@ const checkRole = (roleTypeNeeded) => {
                   } else {
                     return res.status(401).json({
                       name: "Unauthorized Error",
-                      message: "You don't have permission to access this resource",
+                      message: "You don't have permission to access this resource.",
                     });
                   }
                 default:
                   return res.status(401).json({
                     name: "Unauthorized Error",
-                    message: "You don't have permission to access this resource",
+                    message: "You don't have permission to access this resource.",
                   });
               }
             } else {

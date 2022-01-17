@@ -19,7 +19,7 @@ exports.up = function (db, callback) {
   CREATE TABLE IF NOT EXISTS users
   (
       id uuid NOT NULL,
-      email character varying(255) COLLATE pg_catalog."default" NOT NULL,
+      email character varying(255) COLLATE pg_catalog."default" NOT NULL UNIQUE,
       name character varying(255) COLLATE pg_catalog."default" NOT NULL,
       password character varying(255) COLLATE pg_catalog."default" NOT NULL,
       "createdAt" timestamp with time zone NOT NULL,

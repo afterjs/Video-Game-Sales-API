@@ -7,19 +7,19 @@ const loadRolesId = async () => {
   //select role where name = 'admin'
   const adminRole = await Roles.findOne({
     where: {
-      name: "Admin",
+      name: "admin",
     }
   });
 
   const viewRole = await Roles.findOne({
     where: {
-      name: "View",
+      name: "view",
     }
   });
 
   const editRole = await Roles.findOne({
     where: {
-      name: "Edit",
+      name: "edit",
     }
   });
 
