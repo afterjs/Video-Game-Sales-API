@@ -151,7 +151,7 @@ const usersData = {
   createdAt: "2020-05-06T16:00:00.000Z",
   updatedAt: "2020-05-06T16:00:00.000Z",
   roleid: "c6f86c31-ab68-4cdf-9ee3-e2dfd04d15d8",
-}
+};
 
 const roles = [
   {
@@ -1215,7 +1215,7 @@ describe("Users route Unit Testing", () => {
       })
       .end((err, res) => {
         res.should.have.status(401);
-        res.body.should.be.a("object")
+        res.body.should.be.a("object");
         res.body.should.have.property("message").eq("Email ou password not found");
         done();
       });
@@ -1246,7 +1246,35 @@ describe("Users route Unit Testing", () => {
         done();
       });
   });
+});
 
+describe("Global routes Unit Testing", () => {
+  it("GET /unknown/ - It should return error when route doesn't exist", (done) => {
+    chai
+      .request(server)
+      .get("/unknown/")
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.be.a("object");
+        res.body.should.have.property("error").property("name").eq("Error");
+        res.body.should.have.property("error").property("message").eq("Invalid Request");
+        res.body.should.have.property("error").property("statusCode").eq(404);
+        res.body.should.have.property("error").property("docs").eq("http://localhost:3000/api/v1/api-docs");
+        res.body.should.have.property("message").eq("This route does not exist");
+        done();
+      });
+  });
 
-
+  it("GET /unknown/ - It should return error because have an json syntax error", (done) => {
+    chai
+      .request(server)
+      .post("/roles/")
+      .send("name:'\n'123")
+      .set("authorization", adminToken)
+      .end((err, res) => {
+        res.should.have.status(400);
+      
+        done();
+      });
+  });
 });

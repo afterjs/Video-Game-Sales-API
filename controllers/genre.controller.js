@@ -155,7 +155,7 @@ let deleteGenre = (req, res, next) => {
     },
   })
     .then((result) => {
-      console.log(result);
+
       if (result > 0) {
         return res.status(200).json({
           message: "Genre deleted successfully",

@@ -9,7 +9,7 @@
     }
   },
   "host": "localhost:3000",
-  "basePath": "api/v1/",
+  "basePath": "/api/v1/",
   "security": [
     {
       "jwt": []
@@ -46,10 +46,10 @@
     }
   ],
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
-    "/api/v1/user/": {
+    "/users/": {
       "get": {
         "tags": [
           "Users"
@@ -132,7 +132,7 @@
         }
       }
     },
-    "/api/v1/user/login": {
+    "/users/login": {
       "post": {
         "tags": [
           "Users"
@@ -180,7 +180,7 @@
         }
       }
     },
-    "/api/v1/user/{uid}": {
+    "/users/{uid}": {
       "get": {
         "tags": [
           "Users"
@@ -323,7 +323,7 @@
         }
       }
     },
-    "/api/v1/games/": {
+    "/games/": {
       "get": {
         "tags": [
           "Games"
@@ -414,7 +414,7 @@
         }
       }
     },
-    "/api/v1/games/{uid}": {
+    "/games/{uid}": {
       "get": {
         "tags": [
           "Games"
@@ -567,7 +567,7 @@
         }
       }
     },
-    "/api/v1/genres/": {
+    "/genres/": {
       "get": {
         "tags": [
           "Genres"
@@ -658,7 +658,7 @@
         }
       }
     },
-    "/api/v1/genres/{uid}": {
+    "/genres/{uid}": {
       "get": {
         "tags": [
           "Genres"
@@ -811,7 +811,7 @@
         }
       }
     },
-    "/api/v1/plataforms/": {
+    "/plataforms/": {
       "get": {
         "tags": [
           "Plataforms"
@@ -902,7 +902,7 @@
         }
       }
     },
-    "/api/v1/plataforms/{uid}": {
+    "/plataforms/{uid}": {
       "get": {
         "tags": [
           "Plataforms"
@@ -1055,7 +1055,7 @@
         }
       }
     },
-    "/api/v1/roles/": {
+    "/roles/": {
       "get": {
         "tags": [
           "Roles"
@@ -1146,7 +1146,7 @@
         }
       }
     },
-    "/api/v1/roles/{uid}": {
+    "/roles/{uid}": {
       "get": {
         "tags": [
           "Roles"
@@ -1299,13 +1299,13 @@
         }
       }
     },
-    "/api/v1/sales/": {
+    "/sales/": {
       "get": {
         "tags": [
           "Sales"
         ],
         "summary": "Get all Sales data",
-        "description": "This endpoint returns all users data",
+        "description": "This endpoint returns all sales data",
         "parameters": [
           {
             "name": "Authorization",
@@ -1390,7 +1390,92 @@
         }
       }
     },
-    "/api/v1/sales/{uid}": {
+    "/sales/ij/": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Get all Sales data with games label",
+        "description": "This endpoint returns all sales data",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns all Sales data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SalesWithName"
+              }
+            }
+          },
+          "400": {
+            "description": "Sales data not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      }
+    },
+    "/sales/ij/{uid}": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Get all Sales data with games label",
+        "description": "This endpoint returns all sales data with labels",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Roles UID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns all Sales data by id with label names",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SalesWithName"
+              }
+            }
+          },
+          "400": {
+            "description": "Sales data not found"
+          },
+          "401": {
+            "description": "Token not found or invalid or perms not enough"
+          }
+        }
+      }
+    },
+
+
+    "/sales/{uid}": {
       "get": {
         "tags": [
           "Sales"
@@ -1502,7 +1587,7 @@
             "description": "Sales data",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/Sales"
             }
           }
         ],
@@ -1534,12 +1619,21 @@
       }
     },
 
-    "/api/version": {
+    "/infos/version": {
       "get": {
         "tags": [
           "Infos"
         ],
         "description": "Obtem a versão atual da API",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "This endpoint returns the current version of the API"
@@ -1548,6 +1642,8 @@
       }
     }
   },
+
+
   "definitions": {
     "UserData": {
       "type": "object",
@@ -1713,20 +1809,46 @@
           "type": "integer",
           "example": 1
         },
-        "genreID": {
+        "genreid": {
           "type": "string",
           "format": "uuid",
           "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
         },
-        "plataformID": {
+        "platformid": {
           "type": "string",
           "format": "uuid",
           "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
         },
-        "gameID": {
+        "gameid": {
           "type": "string",
           "format": "uuid",
           "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        }
+      }
+    },
+    "SalesWithName": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "rank": {
+          "type": "integer",
+          "example": 1
+        },
+        "genre": {
+          "type": "string",
+          "example": "Sports"
+        },
+        "platform": {
+          "type": "string",
+          "example": "WII"
+        },
+        "game": {
+          "type": "string",
+          "example": "CSGO"
         }
       }
     }
