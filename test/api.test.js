@@ -4,9 +4,9 @@ let server = "http://localhost:3000/api/v1";
 chai.should();
 chai.use(chaiHttp);
 
-const adminToken = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjMWYxNzM1LTRkMmUtNDM5OS1hOGJlLTUzYmYzM2QzM2QzMSIsImlhdCI6MTY0MjE4MzkyMiwiZXhwIjoxNjQyNzg4NzIyfQ.rmcJxcPQc5GjXNnHPMca2Yu21PZzFA9ovi8NjCwFjIc`;
-const viewToken = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNiNDkyMmZmLWFhNzMtNGEzYi1iOTg0LTFmMmY1MGI0OTY4MCIsImlhdCI6MTY0MjE4Mzk1OCwiZXhwIjoxNjQyNzg4NzU4fQ.uC-pCTOukpjZkbjtbuyCDTEjpB55aUVX5s6WfwbUkoM`;
-const editToken = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY2MzlkMGQ1LTU5YTgtNDEyZC1hNTgyLWM4YmY1YzgzYjIzZiIsImlhdCI6MTY0MjE4Mzk4MiwiZXhwIjoxNjQyNzg4NzgyfQ.zkvryvF-NC9uBmCMuVM3oR1OJhlxsMlLZrDnuWUhmgE`;
+const adminToken = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjMWYxNzM1LTRkMmUtNDM5OS1hOGJlLTUzYmYzM2QzM2QzMSIsImlhdCI6MTY0Mjk4MTExOSwiZXhwIjoxNjQzNTg1OTE5fQ.HFXC5LBAV7nocLxF4U5bHVQciHb0NQueTwANAFv8i1k`;
+const viewToken = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNiNDkyMmZmLWFhNzMtNGEzYi1iOTg0LTFmMmY1MGI0OTY4MCIsImlhdCI6MTY0Mjk4MTA5NSwiZXhwIjoxNjQzNTg1ODk1fQ.NmxMaaoB2CYaa87pUY4-JGfD4KhLyMRkk8nuyqasGyY`;
+const editToken = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY2MzlkMGQ1LTU5YTgtNDEyZC1hNTgyLWM4YmY1YzgzYjIzZiIsImlhdCI6MTY0Mjk4MTEzNSwiZXhwIjoxNjQzNTg1OTM1fQ.8lhEgiqoNJdum0_VJkjwEPL_CNAlmd-Hi226fMKrF9Q`;
 
 const Games = require("../models/games");
 const Genres = require("../models/genres");
@@ -192,7 +192,7 @@ describe("Infos route Unit Testing", () => {
   it("GET /infos/ - It should return message and api version", (done) => {
     chai
       .request(server)
-      .get("/infos/")
+      .get("/infos/version")
       .set("authorization", viewToken)
       .end((err, res) => {
         res.should.have.status(200);
@@ -206,7 +206,7 @@ describe("Infos route Unit Testing", () => {
   it("GET /infos/ - It should return error because it hasn't token", (done) => {
     chai
       .request(server)
-      .get("/infos/")
+      .get("/infos/version")
       .end((err, res) => {
         res.should.have.status(401);
         res.body.should.be.a("object");
