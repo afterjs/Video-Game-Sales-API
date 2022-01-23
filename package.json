@@ -8,8 +8,7 @@
     "dev": "nodemon app.js",
     "migrateup": "db-migrate up --config config/database.json",
     "migratedown": "db-migrate reset --config config/database.json",
-    "readCsv": "node data/readCsv.js",
-    "tt": "db-migrate create 123"
+    "readCsv": "node data/readCsv.js"
   },
   "repository": {
     "type": "git",
