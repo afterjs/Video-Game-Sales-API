@@ -41,7 +41,7 @@ app.use((err, req, res, next) => {
 
 app.use(function(req, res) {
   // Invalid request
-        res.json({
+        res.status(404).json({
           error: {
             'name':'Error',
             'message':'Invalid Request',

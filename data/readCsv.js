@@ -38,7 +38,6 @@ fs.readFile("./data/dataset.csv", "utf8", function (err, data) {
           name: nameResolved,
         };
         genresArr.push(schema);
-
       }
     }
 
@@ -79,8 +78,6 @@ fs.readFile("./data/dataset.csv", "utf8", function (err, data) {
   insertData(genresArr, gamesArr, platformsArr).then(() => {
     insertGameSales(csvData);
   });
-
-
 
 });
 
@@ -140,13 +137,9 @@ let insertGameSales = (allData) => {
         platformid: platformId,
         gameid: gameId,
       };
-
-
       sales.push(schema);
-
     }
   }
-
 
   Sales.bulkCreate(sales).then(() => {
     console.log("Succesfully added sales");
