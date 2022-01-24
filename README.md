@@ -82,3 +82,8 @@ All routes are protected with tokens. To acquire a token, you need to login. The
 | admin@ipvc.pt | admin    |
 | view@ipvc.pt  | view     |
 | edit@ipvc.pt  | edit     |
+
+
+**Conclusion**
+
+This project was developed for a distributed services class as final project , with the main purpose of learning about REST architecture, ORM, PostgreSQL and JWT
