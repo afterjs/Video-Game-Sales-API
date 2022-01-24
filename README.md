@@ -37,6 +37,7 @@ After installing the dependencies, you must create an .env file or change the cu
 | JWT_SECRET        | key            |
 | ROUTE_PREFIX      | /api/v1        |
 
+
 ### Kaggle API
 
 In this project I used the _Kaggle API (datasets website)_ to download datasets automatically.
@@ -45,6 +46,7 @@ To do this, you need the _credentials_.
 Step by step how to get the _credentials_: [Kaggle API Docs](https://github.com/Kaggle/kaggle-api)
 
 ### Set up database using db-migrate
+
 To set up database, you only need to run the command:
 
     npm run migrateup
@@ -53,13 +55,11 @@ Or to set down:
 
     npm run migradown
 
-
-
 ### Download dataset using Kaggle and import CSV to database
 
-To download a new dataset using Kaggle, you just need to run the next command in data folder `npm run runMigrations datasetName fileName`. 
-- Example `npm run runMigrations gregorut/videogamesales dataset.csv`
+To download a new dataset using Kaggle, you just need to run the next command in data folder `npm run runMigrations datasetName fileName`. Example:
 
+    npm run runMigrations gregorut/videogamesales dataset.csv
 
 ### Read csv without use kaggle
 
@@ -69,7 +69,16 @@ To import the data into the database, you have to use the command:
 
     npm run readCsv
 
-
 ### API DOCUMENTATION
 
 This API have a documentation created with swagger express. To access the API docs, you need to run server, and access `localhost:3000/api/v1/api/api-docs`
+
+### JWT TOKEN
+
+All routes are protected with tokens. To acquire a token, you need to login. They are protected by several types of permissions that can be seen in the documentation. Predefined API accounts.
+
+| Email         | Password |
+| ------------- | -------- |
+| admin@ipvc.pt | admin    |
+| view@ipvc.pt  | view     |
+| edit@ipvc.pt  | edit     |
