@@ -142,7 +142,6 @@ const saleData = [
     gameid: "9689cedf-9437-4ca7-9cd2-d07c96febc13",
   },
 ];
-
 const usersData = {
   id: "d5aa3acb-3de2-490e-b59c-67fcf9409af7",
   email: "ric123@gmail.com",
@@ -152,7 +151,6 @@ const usersData = {
   updatedAt: "2020-05-06T16:00:00.000Z",
   roleid: "c6f86c31-ab68-4cdf-9ee3-e2dfd04d15d8",
 };
-
 const roles = [
   {
     id: "5e319552-7977-43fa-81a7-dae2ffc5aeff",
@@ -180,7 +178,8 @@ try {
   before(async () => {
     try {
       await insertForeingKeys().then((val) => {
-        Sales.bulkCreate(saleData);
+        //Sales.bulkCreate(saleData);
+        console.log("data loaded on")
       });
     } catch (err) {
       console.log(err);
@@ -214,6 +213,7 @@ describe("Infos route Unit Testing", () => {
         done();
       });
   });
+  
 });
 
 describe("Logs route Unit Testing", () => {
